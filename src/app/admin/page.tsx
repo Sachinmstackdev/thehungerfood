@@ -24,7 +24,6 @@ import {
   PlusCircle,
   Eye,
   EyeOff,
-  Copy,
   Check,
   X,
   SlidersHorizontal,
@@ -533,29 +532,6 @@ export default function AdminDashboardPage() {
                   Locked for security: retry in {lockoutRemaining}s
                 </p>
               )}
-
-              <div className="mt-4 p-3.5 bg-stone-50 rounded-2xl border border-stone-200 text-xs text-stone-600 space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-stone-700">Default Owner Password:</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText("Hunger@Master2026");
-                      setPasswordInput("Hunger@Master2026");
-                    }}
-                    className="text-[11px] font-bold text-[#eb4d23] hover:underline cursor-pointer flex items-center gap-1"
-                  >
-                    <Copy className="w-3 h-3" />
-                    <span>Auto-Fill</span>
-                  </button>
-                </div>
-                <div className="bg-white px-2.5 py-1.5 rounded-lg border border-stone-200 font-mono font-bold text-stone-800 text-center tracking-wider text-sm select-all">
-                  Hunger@Master2026
-                </div>
-                <p className="text-[10px] text-stone-400 text-center pt-0.5">
-                  You can change this password anytime in the dashboard settings tab.
-                </p>
-              </div>
             </div>
 
             <button
