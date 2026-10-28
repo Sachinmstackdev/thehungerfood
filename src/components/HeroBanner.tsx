@@ -77,8 +77,8 @@ export default function HeroBanner() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4">
-      <div className="relative w-full h-[220px] sm:h-[280px] md:h-[340px] lg:h-[380px] rounded-3xl overflow-hidden bg-[#020202] text-white shadow-soft group select-none border border-stone-800">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-4">
+      <div className="relative w-full h-[210px] sm:h-[280px] md:h-[340px] lg:h-[380px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#020202] text-white shadow-soft group select-none border border-stone-800">
         {/* Background Food Image */}
         <div className="absolute inset-0">
           <Image
@@ -94,10 +94,10 @@ export default function HeroBanner() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 h-full p-5 sm:p-7 md:p-10 flex flex-col justify-between">
+        <div className="relative z-10 h-full p-4 sm:p-7 md:p-10 flex flex-col justify-between">
           <div>
             {/* Limited Time Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] sm:text-xs font-bold tracking-wider text-orange-200 uppercase border border-white/15">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-white/10 backdrop-blur-md text-[9px] sm:text-xs font-bold tracking-wider text-orange-200 uppercase border border-white/15">
               <Sparkles className="w-3 h-3 text-[#eb4d23]" />
               <span>{slide.badge}</span>
               <span className="hidden sm:inline text-white/40">•</span>
@@ -105,14 +105,14 @@ export default function HeroBanner() {
             </div>
 
             {/* Main Headline */}
-            <div className="mt-2.5 sm:mt-4">
-              <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight sm:leading-none tracking-tight font-heading uppercase text-white drop-shadow-md">
+            <div className="mt-2 sm:mt-4">
+              <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight sm:leading-none tracking-tight font-heading uppercase text-white drop-shadow-md">
                 <span>{slide.title1}</span> <br className="sm:hidden" />
                 <span className="hidden sm:inline"> </span>
                 <span>{slide.title2}</span> <br />
                 <span className="text-[#eb4d23]">{slide.title3}</span>
               </h2>
-              <p className="mt-1.5 sm:mt-2.5 text-xs sm:text-sm md:text-base text-stone-200 font-medium tracking-wide max-w-md line-clamp-2">
+              <p className="mt-1 sm:mt-2.5 text-[11px] sm:text-sm md:text-base text-stone-200 font-medium tracking-wide max-w-md line-clamp-2">
                 {slide.subtitle}
               </p>
             </div>

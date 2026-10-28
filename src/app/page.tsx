@@ -51,11 +51,11 @@ export default function Home() {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-[#f8f6f0] text-[#020202] flex flex-col justify-start pb-24 md:pb-12 selection:bg-[#eb4d23] selection:text-white">
+      <div className="min-h-screen bg-[#f8f6f0] text-[#020202] flex flex-col justify-start pb-24 md:pb-12 selection:bg-[#eb4d23] selection:text-white overflow-x-hidden max-w-full w-full">
         {/* Sticky Responsive Header */}
         <Header onOpenSettings={() => setIsSettingsOpen(true)} />
 
-        <main className="flex-1 flex flex-col w-full">
+        <main className="flex-1 flex flex-col w-full min-w-0">
           {/* Search Bar & Desktop Quick Filters */}
           <SearchBar
             searchQuery={searchQuery}
@@ -74,7 +74,7 @@ export default function Home() {
           />
 
           {/* Popular Combos / Menu Section */}
-          <section id="popular-combos" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <section id="popular-combos" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 sm:mb-6 pb-2 border-b border-stone-200/60">
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-6 bg-[#eb4d23] rounded-full" />
@@ -144,7 +144,7 @@ export default function Home() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5 lg:gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -156,8 +156,8 @@ export default function Home() {
           <ExclusiveOffer />
 
           {/* Why Foodies Love The Hunger Food (Features Showcase) */}
-          <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <div className="bg-white rounded-3xl p-5 sm:p-7 md:p-8 border border-[#ede8dc] shadow-soft">
+          <section className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-7 md:p-8 border border-[#ede8dc] shadow-soft">
               <div className="flex items-center gap-2.5 pb-4 border-b border-stone-100">
                 <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center">
                   <Flame className="w-4 h-4 text-[#eb4d23]" />
@@ -172,7 +172,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-5">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 pt-5">
                 <div className="p-4 bg-stone-50 hover:bg-orange-50/50 rounded-2xl flex flex-col items-center text-center border border-stone-100 transition-colors">
                   <div className="w-10 h-10 rounded-2xl bg-white shadow-xs flex items-center justify-center mb-2">
                     <Sparkles className="w-5 h-5 text-[#eb4d23]" />
@@ -228,18 +228,18 @@ export default function Home() {
           <LocationSection />
 
           {/* Direct WhatsApp Call/Chat assistance banner */}
-          <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 mb-6">
+          <section className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 mb-6">
             <a
               href={`https://wa.me/${RESTAURANT_INFO.phone}?text=${encodeURIComponent(
                 "Hi The Hunger Food! I have a question about today's menu or want to place a custom bulk order."
               )}`}
               target="_blank"
               rel="noreferrer"
-              className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-5 bg-gradient-to-r from-stone-900 via-stone-850 to-stone-900 text-white rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer border border-stone-800 gap-4"
+              className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-5 bg-gradient-to-r from-stone-900 via-stone-850 to-stone-900 text-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all cursor-pointer border border-stone-800 gap-4"
             >
-              <div className="flex items-center gap-4 text-center sm:text-left">
-                <div className="w-12 h-12 rounded-2xl bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-md">
-                  <PhoneCall className="w-6 h-6" />
+              <div className="flex items-center gap-3 sm:gap-4 text-center sm:text-left">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-md">
+                  <PhoneCall className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
                   <h4 className="text-sm sm:text-base font-bold leading-tight">
@@ -260,7 +260,7 @@ export default function Home() {
         </main>
 
         {/* Rich Desktop & Mobile Footer */}
-        <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 border-t border-stone-200/80 mt-6">
+        <footer className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-8 pb-10 border-t border-stone-200/80 mt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Column 1: Brand Info */}
             <div className="md:col-span-1 space-y-3">

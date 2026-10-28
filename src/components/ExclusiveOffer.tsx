@@ -13,8 +13,8 @@ export default function ExclusiveOffer() {
   };
 
   return (
-    <div id="offers" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-6">
-      <div className="relative rounded-3xl bg-gradient-to-r from-[#fff2ec] via-[#ffece3] to-[#fff5f0] border border-[#fdd8cc] p-5 sm:p-8 overflow-hidden shadow-soft flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div id="offers" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+      <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#fff2ec] via-[#ffece3] to-[#fff5f0] border border-[#fdd8cc] p-4 sm:p-8 overflow-hidden shadow-soft flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-6">
         {/* Left Copy */}
         <div className="relative z-10 w-full sm:max-w-xl text-center sm:text-left">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eb4d23]/10 text-[#eb4d23] text-xs font-black tracking-wider uppercase mb-2">

@@ -33,30 +33,30 @@ export default function Header({ onOpenSettings }: HeaderProps) {
   return (
     <>
       <header className="sticky top-0 z-30 bg-[#f8f6f0]/95 backdrop-blur-md border-b border-[#ede8dc] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3 sm:gap-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-6">
           {/* Left: Mobile Hamburger OR Desktop Brand Logo */}
-          <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             {/* Hamburger Button (Mobile only) */}
             <button
               onClick={() => setIsDrawerOpen(true)}
               aria-label="Open navigation menu"
-              className="md:hidden w-11 h-11 rounded-2xl bg-white shadow-soft flex items-center justify-center text-stone-800 hover:bg-stone-50 active:scale-95 transition-all cursor-pointer border border-[#ede8dc]"
+              className="md:hidden w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white shadow-soft flex items-center justify-center text-stone-800 hover:bg-stone-50 active:scale-95 transition-all cursor-pointer border border-[#ede8dc] shrink-0"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             {/* Brand Logo & Tagline */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#eb4d23] to-[#c7350e] flex items-center justify-center shadow-md shadow-[#eb4d23]/25 group-hover:scale-105 transition-transform text-white shrink-0">
-                <Flame className="w-5 h-5 sm:w-6 sm:h-6 fill-white/20 text-white" />
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#eb4d23] to-[#c7350e] flex items-center justify-center shadow-md shadow-[#eb4d23]/25 group-hover:scale-105 transition-transform text-white shrink-0">
+                <Flame className="w-4 h-4 sm:w-6 sm:h-6 fill-white/20 text-white" />
               </div>
-              <div className="text-left">
+              <div className="text-left min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#020202] font-heading uppercase leading-none">
+                  <span className="text-base sm:text-xl font-black tracking-tight text-[#020202] font-heading uppercase leading-none truncate block">
                     THE HUNGER <span className="text-[#eb4d23]">FOOD</span>
                   </span>
                 </div>
-                <span className="text-[10px] sm:text-[11px] font-semibold text-[#eb4d23] tracking-wide block leading-tight mt-0.5">
+                <span className="text-[9px] sm:text-[11px] font-semibold text-[#eb4d23] tracking-wide block leading-tight mt-0.5 truncate hidden min-[360px]:block">
                   It&apos;s finger lickin&apos; good.
                 </span>
               </div>
@@ -110,7 +110,7 @@ export default function Header({ onOpenSettings }: HeaderProps) {
           </div>
 
           {/* Right Action Icons (Clean customer-facing layout, no public admin button) */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Quick WhatsApp Support (Desktop) */}
             <a
               href={`https://wa.me/${RESTAURANT_INFO.phone}?text=${encodeURIComponent("Hi The Hunger Food! I would like to place an order.")}`}
@@ -128,17 +128,17 @@ export default function Header({ onOpenSettings }: HeaderProps) {
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 aria-label="Notifications"
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white shadow-soft flex items-center justify-center text-[#020202] hover:bg-stone-50 active:scale-95 transition-all cursor-pointer border border-[#ede8dc]"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white shadow-soft flex items-center justify-center text-[#020202] hover:bg-stone-50 active:scale-95 transition-all cursor-pointer border border-[#ede8dc]"
               >
                 <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#eb4d23] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-[#eb4d23] text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                 3
               </span>
 
               {/* Notification Popover */}
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-2xl border border-stone-200 p-3.5 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute right-0 sm:right-0 mt-2 w-[min(calc(100vw-24px),320px)] sm:w-80 bg-white rounded-3xl shadow-2xl border border-stone-200 p-3.5 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="flex items-center justify-between pb-2.5 border-b border-stone-100 font-bold text-stone-800">
                     <span className="flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-[#eb4d23]" />
@@ -169,21 +169,21 @@ export default function Header({ onOpenSettings }: HeaderProps) {
               )}
             </div>
 
-            {/* Shopping Cart Pill Button */}
+            {/* Shopping Cart Pill Button (Responsive icon on compact mobile, pill with price on larger screens) */}
             <button
               onClick={() => setIsCartOpen(true)}
               aria-label="View Cart"
-              className="relative flex items-center gap-2.5 h-10 sm:h-11 px-3.5 sm:px-4 rounded-2xl bg-stone-900 hover:bg-stone-800 active:scale-95 text-white shadow-soft transition-all cursor-pointer border border-stone-800"
+              className="relative flex items-center justify-center gap-1.5 sm:gap-2.5 h-9 sm:h-11 px-2.5 sm:px-4 rounded-xl sm:rounded-2xl bg-stone-900 hover:bg-stone-800 active:scale-95 text-white shadow-soft transition-all cursor-pointer border border-stone-800 shrink-0"
             >
               <div className="relative">
                 <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 sm:w-4.5 sm:h-4.5 bg-[#eb4d23] text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse-subtle shadow-sm border border-stone-900">
+                  <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-4.5 sm:h-4.5 bg-[#eb4d23] text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse-subtle shadow-sm border border-stone-900">
                     {totalItems}
                   </span>
                 )}
               </div>
-              <span className="text-xs sm:text-sm font-extrabold whitespace-nowrap">
+              <span className="text-[11px] sm:text-sm font-extrabold whitespace-nowrap hidden min-[370px]:inline">
                 {totalItems > 0 ? `₹${grandTotal}` : "Cart"}
               </span>
             </button>

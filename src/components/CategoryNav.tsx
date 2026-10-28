@@ -52,9 +52,9 @@ export default function CategoryNav({
   };
 
   return (
-    <section className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-2 select-none group">
+    <section className="relative w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2.5 sm:pt-3 pb-2 select-none group">
       {/* Section Header */}
-      <div className="flex items-end justify-between mb-3 px-1">
+      <div className="flex items-end justify-between mb-2.5 sm:mb-3 px-1">
         <div>
           <div className="flex items-center gap-1.5">
             <Flame className="w-4 h-4 text-[#eb4d23]" />
@@ -97,7 +97,7 @@ export default function CategoryNav({
             touchAction: "pan-x",
             overscrollBehaviorX: "contain",
           }}
-          className="flex items-start justify-start md:justify-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar py-3 px-2 scroll-smooth cursor-grab active:cursor-grabbing snap-x snap-mandatory"
+          className="flex items-start justify-start md:justify-center gap-3.5 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar py-2.5 sm:py-3 px-1 sm:px-2 scroll-smooth cursor-grab active:cursor-grabbing snap-x snap-mandatory"
         >
           {CATEGORIES.map((cat) => {
             const isSelected = selectedCategory === cat.id;
@@ -110,12 +110,12 @@ export default function CategoryNav({
                     onSelectCategory(cat.id);
                   }
                 }}
-                className="group/cat flex flex-col items-center gap-2 shrink-0 snap-start cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb4d23] rounded-2xl p-1 transition-transform active:scale-95"
+                className="group/cat flex flex-col items-center gap-1.5 sm:gap-2 shrink-0 snap-start cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb4d23] rounded-2xl p-1 transition-transform active:scale-95"
               >
                 {/* Circular Food Image Avatar Container */}
                 <div className="relative">
                   <div
-                    className={`relative w-20 h-20 sm:w-22 sm:h-22 md:w-24 md:h-24 rounded-full overflow-hidden transition-all duration-300 ${
+                    className={`relative w-[72px] h-[72px] sm:w-22 sm:h-22 md:w-24 md:h-24 rounded-full overflow-hidden transition-all duration-300 ${
                       isSelected
                         ? "ring-4 ring-[#eb4d23] ring-offset-2 ring-offset-[#f8f6f0] scale-105 shadow-xl shadow-[#eb4d23]/30"
                         : "ring-2 ring-stone-200 hover:ring-[#eb4d23]/60 shadow-md hover:shadow-lg hover:scale-105"

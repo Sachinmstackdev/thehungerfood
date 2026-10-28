@@ -39,34 +39,34 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <div className={`bg-white rounded-3xl p-3 sm:p-4 shadow-soft border border-[#ede8dc] flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group ${
+      <div className={`bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 shadow-soft border border-[#ede8dc] flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group ${
         isOutOfStock ? "opacity-75" : ""
       }`}>
         <div>
           {/* Top Badges & Favorite Heart */}
-          <div className="flex items-center justify-between w-full mb-1.5 z-10">
+          <div className="flex items-center justify-between w-full mb-1.5 z-10 gap-1">
             {isOutOfStock ? (
-              <span className="text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider bg-stone-900 text-white">
+              <span className="text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider bg-stone-900 text-white truncate">
                 Out of Stock
               </span>
             ) : product.badge ? (
               <span
-                className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider shadow-xs ${getBadgeClass(
+                className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider shadow-xs truncate ${getBadgeClass(
                   product.badge
                 )}`}
               >
                 {product.badge}
               </span>
             ) : (
-              <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-stone-600">
+              <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-stone-600 truncate">
                 {product.isVeg ? (
-                  <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                    <span className="w-2 h-2 rounded-full bg-emerald-600" aria-hidden="true" />
+                  <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded-md border border-emerald-200 truncate">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-600 shrink-0" aria-hidden="true" />
                     <span>Pure Veg</span>
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
-                    <span className="w-2 h-2 rounded-full bg-rose-600" aria-hidden="true" />
+                  <span className="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-1.5 sm:px-2 py-0.5 rounded-md border border-rose-200 truncate">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-600 shrink-0" aria-hidden="true" />
                     <span>Non-Veg</span>
                   </span>
                 )}
@@ -76,10 +76,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             <button
               onClick={() => toggleFavorite(product.id)}
               aria-label="Add to favorites"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:text-[#eb4d23] hover:bg-orange-50 transition-colors cursor-pointer"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:text-[#eb4d23] hover:bg-orange-50 transition-colors cursor-pointer shrink-0"
             >
               <Heart
-                className={`w-4 h-4 transition-transform active:scale-125 ${
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform active:scale-125 ${
                   isFavorite ? "fill-[#eb4d23] text-[#eb4d23]" : "text-stone-400"
                 }`}
               />
@@ -138,48 +138,48 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Price & Add to Cart Action */}
-        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-stone-100">
-          <div>
-            <span className="text-base sm:text-xl font-black text-[#020202] font-heading">
+        <div className="flex items-center justify-between mt-2.5 sm:mt-3 pt-2 sm:pt-2.5 border-t border-stone-100 gap-1">
+          <div className="min-w-0">
+            <span className="text-sm sm:text-xl font-black text-[#020202] font-heading">
               ₹{product.price}
             </span>
             {product.originalPrice && (
-              <span className="text-xs sm:text-sm text-stone-400 line-through ml-1.5 font-medium">
+              <span className="text-[10px] sm:text-sm text-stone-400 line-through ml-1 sm:ml-1.5 font-medium">
                 ₹{product.originalPrice}
               </span>
             )}
           </div>
 
           {isOutOfStock ? (
-            <span className="text-[11px] font-bold text-stone-400 bg-stone-100 px-2.5 py-1 rounded-full">
+            <span className="text-[10px] sm:text-[11px] font-bold text-stone-400 bg-stone-100 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shrink-0">
               Unavailable
             </span>
           ) : quantity === 0 ? (
             <button
               onClick={() => addToCart(product)}
               aria-label={`Add ${product.name} to cart`}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#eb4d23] hover:bg-[#d43f16] active:scale-95 text-white flex items-center justify-center shadow-md shadow-[#eb4d23]/25 transition-all cursor-pointer"
+              className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-[#eb4d23] hover:bg-[#d43f16] active:scale-95 text-white flex items-center justify-center shadow-md shadow-[#eb4d23]/25 transition-all cursor-pointer shrink-0"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
             </button>
           ) : (
-            <div className="flex items-center bg-[#eb4d23] text-white rounded-full px-1.5 py-0.5 sm:px-2 sm:py-1 shadow-sm">
+            <div className="flex items-center bg-[#eb4d23] text-white rounded-full px-1 py-0.5 sm:px-2 sm:py-1 shadow-sm shrink-0">
               <button
                 onClick={() => updateQuantity(product.id, quantity - 1)}
                 aria-label="Decrease quantity"
-                className="w-6 h-6 flex items-center justify-center hover:bg-black/10 rounded-full transition-colors cursor-pointer"
+                className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-black/10 rounded-full transition-colors cursor-pointer"
               >
-                <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
               </button>
-              <span className="px-2 text-xs sm:text-sm font-bold min-w-[16px] text-center">
+              <span className="px-1 sm:px-2 text-xs sm:text-sm font-bold min-w-[14px] sm:min-w-[16px] text-center">
                 {quantity}
               </span>
               <button
                 onClick={() => updateQuantity(product.id, quantity + 1)}
                 aria-label="Increase quantity"
-                className="w-6 h-6 flex items-center justify-center hover:bg-black/10 rounded-full transition-colors cursor-pointer"
+                className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-black/10 rounded-full transition-colors cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
               </button>
             </div>
           )}

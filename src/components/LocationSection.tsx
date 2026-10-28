@@ -12,8 +12,8 @@ export default function LocationSection() {
     "https://www.google.com/maps/place/The+hunger+food/@30.8646824,75.9511888,17z";
 
   return (
-    <section id="location" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-      <div className="bg-white rounded-3xl p-5 sm:p-7 md:p-8 border border-[#ede8dc] shadow-soft">
+    <section id="location" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-7 md:p-8 border border-[#ede8dc] shadow-soft">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-stone-100 gap-3">
           <div className="flex items-center gap-3">

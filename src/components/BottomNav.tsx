@@ -26,8 +26,12 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#ede8dc] shadow-[0_-4px_24px_rgba(2,2,2,0.08)] pb-[max(12px,env(safe-area-inset-bottom))]">
-      <div className="max-w-md mx-auto px-4 pt-1.5 flex items-center justify-between relative">
+    <nav
+      aria-label="Mobile Navigation Bar"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#ede8dc] shadow-[0_-4px_24px_rgba(2,2,2,0.08)] pb-3"
+      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom, 12px))" }}
+    >
+      <div className="max-w-md mx-auto px-3 sm:px-4 pt-1.5 flex items-center justify-between relative">
         {/* Home */}
         <button
           onClick={() => handleTabClick("home")}
@@ -55,7 +59,7 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
           <button
             onClick={() => setIsCartOpen(true)}
             aria-label="View Cart"
-            className="w-13 h-13 rounded-full bg-[#eb4d23] hover:bg-[#d43f16] active:scale-95 text-white flex flex-col items-center justify-center shadow-floating transition-all border-4 border-white cursor-pointer"
+            className="w-12 h-12 rounded-full bg-[#eb4d23] hover:bg-[#d43f16] active:scale-95 text-white flex flex-col items-center justify-center shadow-floating transition-all border-4 border-white cursor-pointer"
           >
             <ShoppingBag className="w-5 h-5" />
             {totalItems > 0 && (
@@ -94,6 +98,6 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
           <span className="text-[10px] font-bold mt-1">WhatsApp</span>
         </button>
       </div>
-    </div>
+    </nav>
   );
 }
