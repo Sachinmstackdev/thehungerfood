@@ -26,8 +26,8 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
   };
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 bg-white/95 backdrop-blur-md border-t sm:border-x border-[#ede8dc] shadow-[0_-4px_24px_rgba(2,2,2,0.08)] pb-[max(12px,env(safe-area-inset-bottom))]">
-      <div className="w-full px-4 pt-1.5 flex items-center justify-between relative">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#ede8dc] shadow-[0_-4px_24px_rgba(2,2,2,0.08)] pb-[max(12px,env(safe-area-inset-bottom))]">
+      <div className="max-w-md mx-auto px-4 pt-1.5 flex items-center justify-between relative">
         {/* Home */}
         <button
           onClick={() => handleTabClick("home")}

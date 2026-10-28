@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Product, RESTAURANT_INFO } from "@/data/menu";
+import { RestaurantOrder, INITIAL_ORDERS } from "@/data/orders";
 
 export interface CartItem {
   product: Product;
@@ -43,9 +44,11 @@ interface CartContextType {
   setPaymentMethod: (method: string) => void;
   whatsappNumber: string;
   setWhatsappNumber: (num: string) => void;
-  sendWhatsAppOrder: () => void;
+  sendWhatsAppOrder: () => string | undefined;
   favorites: string[];
   toggleFavorite: (productId: string) => void;
+  outOfStockIds: string[];
+  toggleStockStatus: (productId: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -64,8 +67,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [paymentMethod, setPaymentMethod] = useState("UPI on Delivery / QR");
   const [whatsappNumber, setWhatsappNumber] = useState(RESTAURANT_INFO.phone);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [outOfStockIds, setOutOfStockIds] = useState<string[]>([]);
 
-  // Load saved state from localStorage if available
+  // Load saved state from localStorage
   useEffect(() => {
     try {
       const savedCart = localStorage.getItem("thf_cart");
@@ -93,6 +97,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       const savedFavs = localStorage.getItem("thf_favorites");
       if (savedFavs) setFavorites(JSON.parse(savedFavs));
+
+      const savedStock = localStorage.getItem("thf_out_of_stock");
+      if (savedStock) setOutOfStockIds(JSON.parse(savedStock));
+
+      // Ensure seed orders exist for the Admin Dashboard
+      const savedOrders = localStorage.getItem("thf_orders_list");
+      if (!savedOrders) {
+        localStorage.setItem("thf_orders_list", JSON.stringify(INITIAL_ORDERS));
+      }
     } catch {
       // Ignore storage errors
     }
@@ -108,6 +121,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart]);
 
   const addToCart = (product: Product, instructions?: string) => {
+    if (outOfStockIds.includes(product.id)) return;
     setCart((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
@@ -161,6 +175,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const toggleStockStatus = (productId: string) => {
+    setOutOfStockIds((prev) => {
+      const next = prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
+      try {
+        localStorage.setItem("thf_out_of_stock", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
   const applyCoupon = (code: string) => {
     const clean = code.trim().toUpperCase();
     if (clean === "HUNGER10" || clean === "FIRST50") {
@@ -195,12 +221,43 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("thf_customer_address", deliveryAddress);
     } catch {}
 
-    const orderTypeLabel =
-      orderType === "delivery"
-        ? "🛵 Home Delivery"
-        : orderType === "takeaway"
-        ? "🛍️ Takeaway / Pickup"
-        : `🍽️ Dine-in (Table: ${tableNumber || "Walk-in"})`;
+    const orderNum = "THF-" + Math.floor(1000 + Math.random() * 9000);
+    const newOrder: RestaurantOrder = {
+      id: "ord-" + Date.now(),
+      orderNumber: orderNum,
+      createdAt: new Date().toISOString(),
+      customerName: customerName || "Customer",
+      customerPhone: customerPhone || "Not provided",
+      deliveryAddress: deliveryAddress || "Address provided via chat",
+      locationUrl: locationUrl || undefined,
+      orderType,
+      tableNumber: tableNumber || undefined,
+      paymentMethod,
+      items: cart.map((ci) => ({
+        id: ci.product.id,
+        name: ci.product.name,
+        price: ci.product.price,
+        quantity: ci.quantity,
+        instructions: ci.instructions,
+        category: ci.product.category,
+      })),
+      subtotal,
+      discount,
+      couponCode: discount > 0 ? couponCode : undefined,
+      deliveryFee,
+      grandTotal,
+      status: "new",
+    };
+
+    // Save order to localStorage for Admin Dashboard
+    try {
+      const existing = localStorage.getItem("thf_orders_list");
+      const list: RestaurantOrder[] = existing ? JSON.parse(existing) : [...INITIAL_ORDERS];
+      list.unshift(newOrder);
+      localStorage.setItem("thf_orders_list", JSON.stringify(list));
+      // Dispatch custom event for real-time sync if admin page is open in another tab/window
+      window.dispatchEvent(new Event("thf_orders_updated"));
+    } catch {}
 
     const now = new Date();
     const dateStr = now.toLocaleDateString("en-IN", {
@@ -212,12 +269,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
 
     let msg = `🔥 *NEW ORDER - ${RESTAURANT_INFO.name.toUpperCase()}* 🔥\n`;
+    msg += `📋 *Order ID: #${orderNum}*\n`;
     msg += `🕒 _${dateStr}_\n`;
     msg += `---------------------------------\n`;
     msg += `👤 *Customer Name:* ${customerName || "Customer"}\n`;
+    if (customerPhone) {
+      msg += `📞 *Phone:* ${customerPhone}\n`;
+    }
     msg += `📍 *Delivery Address:* ${deliveryAddress || "Address provided via chat"}\n`;
     if (locationUrl) {
       msg += `🗺️ *Live GPS Location:* ${locationUrl}\n`;
+    }
+    if (orderType === "dine_in" && tableNumber) {
+      msg += `🍽️ *Dine-In Table:* ${tableNumber}\n`;
     }
     msg += `---------------------------------\n`;
     msg += `📋 *ORDER ITEMS:*\n\n`;
@@ -248,6 +312,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const cleanPhone = whatsappNumber.replace(/[^0-9]/g, "");
     const waUrl = `https://wa.me/${cleanPhone}?text=${encoded}`;
     window.open(waUrl, "_blank");
+    return orderNum;
   };
 
   return (
@@ -287,6 +352,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         sendWhatsAppOrder,
         favorites,
         toggleFavorite,
+        outOfStockIds,
+        toggleStockStatus,
       }}
     >
       {children}

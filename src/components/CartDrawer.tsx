@@ -52,8 +52,10 @@ export default function CartDrawer() {
     setPaymentMethod,
     sendWhatsAppOrder,
     whatsappNumber,
+    clearCart,
   } = useCart();
 
+  const [placedOrderNumber, setPlacedOrderNumber] = useState<string | null>(null);
   const [inputCoupon, setInputCoupon] = useState("");
   const [couponStatus, setCouponStatus] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ name?: boolean; phone?: boolean; address?: boolean }>({});
@@ -126,6 +128,11 @@ export default function CartDrawer() {
     );
   };
 
+  const handleClose = () => {
+    setPlacedOrderNumber(null);
+    setIsCartOpen(false);
+  };
+
   const handleCheckout = () => {
     // Validation: Only Name and Address/Location are required
     const newErrors: { name?: boolean; address?: boolean } = {};
@@ -138,7 +145,11 @@ export default function CartDrawer() {
     }
 
     setErrors({});
-    sendWhatsAppOrder();
+    const orderNum = sendWhatsAppOrder();
+    if (orderNum) {
+      setPlacedOrderNumber(orderNum);
+      clearCart();
+    }
   };
 
   return (
@@ -146,11 +157,11 @@ export default function CartDrawer() {
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-        onClick={() => setIsCartOpen(false)}
+        onClick={handleClose}
       />
 
       {/* Drawer Container */}
-      <div className="relative w-full max-w-md bg-[#f8f6f0] h-full shadow-2xl flex flex-col justify-between z-10 overflow-hidden">
+      <div className="relative w-full max-w-md sm:max-w-lg bg-[#f8f6f0] h-full shadow-2xl flex flex-col justify-between z-10 overflow-hidden">
         {/* Header */}
         <div className="p-4 bg-white border-b border-[#ede8dc] flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-2">
@@ -159,16 +170,16 @@ export default function CartDrawer() {
             </span>
             <div>
               <h2 className="text-base font-extrabold text-[#020202] font-heading">
-                Your WhatsApp Order
+                {placedOrderNumber ? "Order Status" : "Your WhatsApp Order"}
               </h2>
               <p className="text-[11px] text-stone-500">
-                {totalItems} {totalItems === 1 ? "item" : "items"} in cart
+                {placedOrderNumber ? "Sent to WhatsApp" : `${totalItems} ${totalItems === 1 ? "item" : "items"} in cart`}
               </p>
             </div>
           </div>
 
           <button
-            onClick={() => setIsCartOpen(false)}
+            onClick={handleClose}
             aria-label="Close cart"
             className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:text-stone-800 transition-colors cursor-pointer"
           >
@@ -178,7 +189,64 @@ export default function CartDrawer() {
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {cart.length === 0 ? (
+          {placedOrderNumber ? (
+            <div className="text-center py-10 px-2 space-y-5">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
+                <CheckCircle2 className="w-9 h-9" />
+              </div>
+
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  Order Successfully Forwarded
+                </span>
+                <h3 className="text-xl font-black text-stone-900 mt-2.5 font-heading">
+                  Order #{placedOrderNumber}
+                </h3>
+                <p className="text-xs text-stone-600 max-w-xs mx-auto mt-1 leading-relaxed">
+                  Your order has been sent to The Hunger Food kitchen. Please confirm the pre-filled message on WhatsApp so our chefs can begin preparing your fresh meal!
+                </p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-4 border border-stone-200 text-left space-y-2.5 text-xs">
+                <div className="flex justify-between text-stone-500">
+                  <span>Customer:</span>
+                  <span className="font-bold text-stone-800">{customerName}</span>
+                </div>
+                {customerPhone && (
+                  <div className="flex justify-between text-stone-500">
+                    <span>Contact Phone:</span>
+                    <span className="font-bold text-stone-800">{customerPhone}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-stone-500">
+                  <span>Order Type:</span>
+                  <span className="font-bold text-stone-800 capitalize">{orderType.replace("_", " ")}</span>
+                </div>
+                {deliveryAddress && (
+                  <div className="flex justify-between text-stone-500">
+                    <span className="shrink-0 mr-2">Delivery To:</span>
+                    <span className="font-bold text-stone-800 truncate text-right">{deliveryAddress}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-stone-500 pt-2 border-t border-stone-100">
+                  <span className="font-bold text-stone-800">Order Status:</span>
+                  <span className="font-bold text-emerald-600 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Sent to Kitchen
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={handleClose}
+                  className="w-full py-3.5 rounded-2xl bg-[#eb4d23] hover:bg-[#d84017] text-white font-extrabold text-xs shadow-md shadow-[#eb4d23]/25 transition-all cursor-pointer"
+                >
+                  Done / Order More Food
+                </button>
+              </div>
+            </div>
+          ) : cart.length === 0 ? (
             <div className="text-center py-16 space-y-3">
               <div className="text-5xl">🍔</div>
               <h3 className="text-base font-bold text-stone-800 font-heading">

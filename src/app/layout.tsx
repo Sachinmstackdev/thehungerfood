@@ -1,17 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  weight: ["600", "700", "800", "900"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -23,7 +18,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "The Hunger Food | Crispy, Juicy, Irresistible",
-  description: "Order fresh and delicious gourmet burgers, biryanis, pizzas and starters directly on WhatsApp. Fast delivery & best prices.",
+  description: "Order fresh and delicious gourmet burgers, noodles, soya chaap and fast food directly on WhatsApp. Fast delivery & best prices.",
 };
 
 export default function RootLayout({
@@ -32,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased text-[#020202] bg-[#f8f6f0] selection:bg-[#eb4d23] selection:text-white min-h-screen">
+    <html lang="en" data-scroll-behavior="smooth" className={plusJakartaSans.variable}>
+      <body className="font-sans antialiased text-[#12100e] bg-[#f8f6f0] selection:bg-[#eb4d23] selection:text-white min-h-screen">
         {children}
       </body>
     </html>

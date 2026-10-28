@@ -5,22 +5,43 @@
   --color-primary-hover: #d43f16;
   --color-primary-light: #fff3ee;
   --color-bg: #f8f6f0;
-  --color-dark: #020202;
+  --color-dark: #0f0d0b;
   --color-card: #ffffff;
   --color-border: #ede8dc;
-  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
-  --font-heading: var(--font-heading), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-dark);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+  letter-spacing: -0.01em;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* Reset outlines on form controls to preserve custom container designs */
+input, textarea, select, button {
+  outline: none;
+}
+
+input:focus, input:focus-visible,
+textarea:focus, textarea:focus-visible,
+select:focus, select:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
 }
 
 /* Hide scrollbar for category horizontal scroll */
@@ -32,22 +53,37 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   scrollbar-width: none;
 }
 
-/* Subtle smooth shadow */
+/* Subtle organic shadows */
 .shadow-soft {
-  box-shadow: 0 4px 20px -2px rgba(2, 2, 2, 0.06), 0 2px 6px -1px rgba(2, 2, 2, 0.04);
+  box-shadow: 0 4px 20px -2px rgba(15, 13, 11, 0.05), 0 2px 6px -1px rgba(15, 13, 11, 0.03);
 }
 .shadow-floating {
-  box-shadow: 0 10px 30px -4px rgba(235, 77, 35, 0.25), 0 4px 10px -2px rgba(2, 2, 2, 0.08);
+  box-shadow: 0 10px 30px -4px rgba(235, 77, 35, 0.28), 0 4px 10px -2px rgba(15, 13, 11, 0.08);
 }
 .shadow-card {
-  box-shadow: 0 2px 12px rgba(2, 2, 2, 0.04);
+  box-shadow: 0 2px 12px rgba(15, 13, 11, 0.04);
 }
 
 @keyframes pulse-subtle {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  50% { transform: scale(1.04); }
 }
 
 .animate-pulse-subtle {
-  animation: pulse-subtle 2s infinite ease-in-out;
+  animation: pulse-subtle 2.5s infinite ease-in-out;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

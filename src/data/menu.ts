@@ -18,16 +18,65 @@ export interface Category {
   id: string;
   name: string;
   icon: string;
+  image: string;
+  subtitle: string;
+  badge?: string;
 }
 
 export const CATEGORIES: Category[] = [
-  { id: "all", name: "All", icon: "🍽️" },
-  { id: "burgers", name: "Burgers", icon: "🍔" },
-  { id: "noodles", name: "Noodles", icon: "🍜" },
-  { id: "chinese", name: "Manchurian", icon: "🥣" },
-  { id: "fries", name: "Fries", icon: "🍟" },
-  { id: "chaap", name: "Chaap", icon: "🍢" },
-  { id: "sandwiches", name: "Sandwich", icon: "🥪" },
+  {
+    id: "all",
+    name: "All Items",
+    icon: "🍽️",
+    image: "/images/hero-banner.jpg",
+    subtitle: "Complete Menu",
+    badge: "Popular",
+  },
+  {
+    id: "burgers",
+    name: "Burgers",
+    icon: "🍔",
+    image: "/images/burger-combo.jpg",
+    subtitle: "From ₹30",
+    badge: "Bestseller",
+  },
+  {
+    id: "noodles",
+    name: "Noodles",
+    icon: "🍜",
+    image: "/images/noodles.jpg",
+    subtitle: "From ₹80",
+  },
+  {
+    id: "chinese",
+    name: "Manchurian",
+    icon: "🥣",
+    image: "/images/chilli-potato.jpg",
+    subtitle: "From ₹50",
+    badge: "Hot",
+  },
+  {
+    id: "fries",
+    name: "Crispy Fries",
+    icon: "🍟",
+    image: "/images/fries.jpg",
+    subtitle: "From ₹30",
+  },
+  {
+    id: "chaap",
+    name: "Soya Chaap",
+    icon: "🍢",
+    image: "/images/tikka-platter.jpg",
+    subtitle: "From ₹120",
+    badge: "Tandoori",
+  },
+  {
+    id: "sandwiches",
+    name: "Sandwich",
+    icon: "🥪",
+    image: "/images/sandwich.jpg",
+    subtitle: "From ₹60",
+  },
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [

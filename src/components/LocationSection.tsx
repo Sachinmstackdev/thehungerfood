@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MapPin, Navigation, Clock, Phone, ExternalLink } from "lucide-react";
+import { MapPin, Navigation, Clock, Phone, ExternalLink, ShieldCheck, Utensils } from "lucide-react";
 import { RESTAURANT_INFO } from "@/data/menu";
 
 export default function LocationSection() {
@@ -12,82 +12,103 @@ export default function LocationSection() {
     "https://www.google.com/maps/place/The+hunger+food/@30.8646824,75.9511888,17z";
 
   return (
-    <section id="location" className="px-4 py-3 max-w-md mx-auto w-full">
-      <div className="bg-white rounded-3xl p-4 sm:p-5 border border-[#ede8dc] shadow-soft space-y-3.5">
-        {/* Title */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-[#eb4d23]/10 text-[#eb4d23] flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-[#eb4d23]" />
+    <section id="location" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="bg-white rounded-3xl p-5 sm:p-7 md:p-8 border border-[#ede8dc] shadow-soft">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-stone-100 gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#eb4d23]/10 text-[#eb4d23] flex items-center justify-center shrink-0">
+              <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-[#eb4d23]" />
             </div>
             <div>
-              <h3 className="font-extrabold text-sm sm:text-base text-[#020202] font-heading leading-tight">
-                Visit & Dine-In
+              <h3 className="font-extrabold text-base sm:text-xl text-[#020202] font-heading leading-tight">
+                Visit Our Outlet & Cloud Kitchen
               </h3>
-              <p className="text-[10px] text-stone-500">
-                The Hunger Food Outlet & Kitchen
+              <p className="text-xs sm:text-sm text-stone-500 mt-0.5">
+                The Hunger Food • Dine-In, Takeaway & Fast Doorstep Delivery
               </p>
             </div>
           </div>
 
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Open Now
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold w-fit">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Kitchen Open Today
           </span>
         </div>
 
-        {/* Embedded Google Map */}
-        <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden border border-stone-200 shadow-inner">
-          <iframe
-            src={mapEmbedUrl}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen={false}
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-            title="The Hunger Food Location"
-            className="w-full h-full"
-          />
-        </div>
-
-        {/* Outlet Details */}
-        <div className="space-y-2 text-xs text-stone-600 pt-1">
-          <div className="flex items-start gap-2.5">
-            <MapPin className="w-4 h-4 text-[#eb4d23] shrink-0 mt-0.5" />
-            <span className="text-[11px] leading-tight font-medium text-stone-700">
-              The Hunger Food, Main Road, Punjab, India
-            </span>
+        {/* 2-Column Grid on Tablet/Laptop */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6 items-center">
+          {/* Embedded Google Map (Left) */}
+          <div className="md:col-span-7 relative w-full h-56 sm:h-72 md:h-80 rounded-2xl overflow-hidden border border-stone-200 shadow-inner">
+            <iframe
+              src={mapEmbedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="The Hunger Food Location"
+              className="w-full h-full"
+            />
           </div>
 
-          <div className="flex items-center gap-2.5">
-            <Clock className="w-4 h-4 text-[#eb4d23] shrink-0" />
-            <span className="text-[11px] font-medium text-stone-700">
-              {RESTAURANT_INFO.timings}
-            </span>
+          {/* Outlet Details & Actions (Right) */}
+          <div className="md:col-span-5 flex flex-col justify-between space-y-4">
+            <div className="space-y-3.5">
+              <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-100 flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-[#eb4d23] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400">Address</h4>
+                  <p className="text-xs sm:text-sm font-semibold text-stone-800 mt-0.5">
+                    {RESTAURANT_INFO.address}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-100 flex items-start gap-3">
+                <Clock className="w-5 h-5 text-[#eb4d23] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400">Timings</h4>
+                  <p className="text-xs sm:text-sm font-semibold text-stone-800 mt-0.5">
+                    {RESTAURANT_INFO.timings}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-100 flex items-start gap-3">
+                <Phone className="w-5 h-5 text-[#eb4d23] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400">Phone & WhatsApp</h4>
+                  <p className="text-xs sm:text-sm font-semibold text-stone-800 mt-0.5">
+                    {RESTAURANT_INFO.displayPhone}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-2">
+              <a
+                href={directMapLink}
+                target="_blank"
+                rel="noreferrer"
+                className="flex-1 py-3 px-4 rounded-2xl bg-[#020202] hover:bg-stone-800 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+              >
+                <Navigation className="w-4 h-4 text-[#eb4d23]" />
+                <span>Get Directions</span>
+                <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+              </a>
+
+              <a
+                href={`tel:${RESTAURANT_INFO.phone}`}
+                className="py-3 px-5 rounded-2xl bg-orange-50 hover:bg-orange-100 text-[#eb4d23] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 border border-orange-200 transition-all cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call Kitchen</span>
+              </a>
+            </div>
           </div>
-        </div>
-
-        {/* Get Directions Action Button */}
-        <div className="pt-2 flex gap-2">
-          <a
-            href={directMapLink}
-            target="_blank"
-            rel="noreferrer"
-            className="flex-1 py-2.5 px-3 rounded-2xl bg-[#020202] hover:bg-stone-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
-          >
-            <Navigation className="w-3.5 h-3.5 text-[#eb4d23]" />
-            <span>Get Directions</span>
-            <ExternalLink className="w-3 h-3 text-stone-400" />
-          </a>
-
-          <a
-            href={`tel:${RESTAURANT_INFO.phone}`}
-            className="py-2.5 px-4 rounded-2xl bg-orange-50 hover:bg-orange-100 text-[#eb4d23] text-xs font-bold flex items-center justify-center gap-1.5 border border-orange-200 transition-all cursor-pointer"
-          >
-            <Phone className="w-3.5 h-3.5" />
-            <span>Call</span>
-          </a>
         </div>
       </div>
     </section>
