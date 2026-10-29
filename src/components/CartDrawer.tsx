@@ -114,15 +114,9 @@ export default function CartDrawer() {
       },
       (err) => {
         setIsLocating(false);
-        if (err.code === 1) {
-          setLocationError("Permission denied. Please allow location access in your browser.");
-        } else if (err.code === 2) {
-          setLocationError("Location unavailable. Please check your GPS signal.");
-        } else if (err.code === 3) {
-          setLocationError("Request timed out. Please try again.");
-        } else {
-          setLocationError("Could not fetch location. Please enter your address manually.");
-        }
+        setLocationError(
+          "Notice: GPS location couldn't be detected (permission blocked or active screen overlays). No worries! Just enter your complete street address & landmark above, or share live location directly in WhatsApp chat."
+        );
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
     );
@@ -134,9 +128,11 @@ export default function CartDrawer() {
   };
 
   const handleCheckout = () => {
-    // Validation: Only Name and Address/Location are required
-    const newErrors: { name?: boolean; address?: boolean } = {};
+    // Validation: Name, Phone (10 digits), and Address/Location are validated
+    const newErrors: { name?: boolean; phone?: boolean; address?: boolean } = {};
     if (!customerName.trim()) newErrors.name = true;
+    const cleanDigits = customerPhone.replace(/[^0-9]/g, "");
+    if (!customerPhone.trim() || cleanDigits.length < 10) newErrors.phone = true;
     if (!deliveryAddress.trim() && !locationUrl) newErrors.address = true;
 
     if (Object.keys(newErrors).length > 0) {
@@ -235,6 +231,15 @@ export default function CartDrawer() {
                     Sent to Kitchen
                   </span>
                 </div>
+              </div>
+
+              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-left space-y-1">
+                <p className="font-extrabold text-emerald-900 text-[11px] flex items-center gap-1.5">
+                  <span>📍</span> Fast Delivery Tip:
+                </p>
+                <p className="text-[10px] text-emerald-700 leading-relaxed">
+                  Want the delivery rider to reach you even faster? In the WhatsApp chat, tap <strong>📎 ➔ Location</strong> to send your live location!
+                </p>
               </div>
 
               <div className="pt-2">
@@ -346,7 +351,7 @@ export default function CartDrawer() {
                 ))}
               </div>
 
-              {/* Customer Contact Details - ONLY Name and Address */}
+              {/* Customer Contact Details */}
               <div className="p-3.5 bg-white rounded-2xl border border-[#ede8dc] shadow-soft space-y-3">
                 <h3 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
                   <span>📍</span> Delivery Details
@@ -375,8 +380,41 @@ export default function CartDrawer() {
 
                 <div>
                   <label className="text-[11px] font-bold text-stone-700 block mb-1">
-                    Delivery Address & Landmark *
+                    Phone Number (for Delivery Call) *
                   </label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-xs font-bold text-stone-400 select-none">+91</span>
+                    <input
+                      type="tel"
+                      maxLength={10}
+                      value={customerPhone}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
+                        setCustomerPhone(val);
+                        if (errors.phone) setErrors((prev) => ({ ...prev, phone: false }));
+                      }}
+                      placeholder="10-digit mobile number"
+                      className={`w-full text-xs pl-11 pr-3 py-3 rounded-xl border ${
+                        errors.phone ? "border-rose-500 bg-rose-50" : "border-stone-200"
+                      } focus:outline-none focus:border-[#eb4d23]`}
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="text-[10px] text-rose-500 font-semibold mt-1">
+                      Please enter a valid 10-digit mobile number for delivery calls
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-bold text-stone-700">
+                      Delivery Address & Nearby Landmark *
+                    </label>
+                    <span className="text-[10px] text-[#eb4d23] font-semibold">
+                      Must include landmark
+                    </span>
+                  </div>
                   <textarea
                     rows={2}
                     value={deliveryAddress}
@@ -384,35 +422,45 @@ export default function CartDrawer() {
                       setDeliveryAddress(e.target.value);
                       if (errors.address) setErrors((prev) => ({ ...prev, address: false }));
                     }}
-                    placeholder="House / Flat no, Street address, Landmark..."
+                    placeholder="House/Flat No, Colony/Street, Landmark (e.g. Near Gurudwara, Opposite Bank)"
                     className={`w-full text-xs p-3 rounded-xl border ${
                       errors.address ? "border-rose-500 bg-rose-50" : "border-stone-200"
                     } focus:outline-none focus:border-[#eb4d23]`}
                   />
                   {errors.address && (
-                    <p className="text-[10px] text-rose-500 font-semibold mt-1">Please enter your delivery address or share live location</p>
+                    <p className="text-[10px] text-rose-500 font-semibold mt-1">
+                      Please enter your delivery address with a nearby landmark
+                    </p>
                   )}
 
-                  {/* Share Current GPS Location feature */}
+                  {/* Share Current GPS Location feature (Optional) */}
                   {!locationUrl ? (
-                    <button
-                      type="button"
-                      onClick={handleGetLocation}
-                      disabled={isLocating}
-                      className="w-full mt-2.5 py-2 px-3 rounded-xl bg-orange-50 hover:bg-orange-100/80 active:scale-98 text-[#eb4d23] border border-orange-200/80 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-2xs"
-                    >
-                      {isLocating ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          <span>Detecting your exact GPS location...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Navigation className="w-3.5 h-3.5 fill-[#eb4d23]" />
-                          <span>Share Current Location (GPS)</span>
-                        </>
-                      )}
-                    </button>
+                    <div className="mt-2.5 space-y-1.5">
+                      <button
+                        type="button"
+                        onClick={handleGetLocation}
+                        disabled={isLocating}
+                        className="w-full py-2 px-3 rounded-xl bg-orange-50 hover:bg-orange-100/80 active:scale-98 text-[#eb4d23] border border-orange-200/80 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-2xs"
+                      >
+                        {isLocating ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Detecting your exact GPS location...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Navigation className="w-3.5 h-3.5 fill-[#eb4d23]" />
+                            <span>Auto-Detect GPS Location (Optional)</span>
+                          </>
+                        )}
+                      </button>
+                      <p className="text-[10px] text-stone-500 flex items-start gap-1 px-1 leading-tight">
+                        <span className="shrink-0 text-amber-500">💡</span>
+                        <span>
+                          <strong>GPS is optional.</strong> Writing your landmark above is 100% enough for our delivery rider, or you can send live location inside WhatsApp (📎 ➔ Location).
+                        </span>
+                      </p>
+                    </div>
                   ) : (
                     <div className="mt-2.5 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200 flex items-center justify-between gap-2 shadow-2xs">
                       <div className="flex items-center gap-2 min-w-0">
@@ -455,8 +503,8 @@ export default function CartDrawer() {
                   )}
 
                   {locationError && (
-                    <div className="mt-2 p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 text-[10px] flex items-center gap-1.5">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-500" />
+                    <div className="mt-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[10px] flex items-start gap-2 leading-relaxed">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
                       <span>{locationError}</span>
                     </div>
                   )}
