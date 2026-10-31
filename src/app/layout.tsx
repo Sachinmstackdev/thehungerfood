@@ -19,6 +19,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "The Hunger Food | Crispy, Juicy, Irresistible",
   description: "Order fresh and delicious gourmet burgers, noodles, soya chaap and fast food directly on WhatsApp. Fast delivery & best prices.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
