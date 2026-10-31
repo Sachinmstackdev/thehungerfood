@@ -111,6 +111,16 @@ export default function Header({ onOpenSettings }: HeaderProps) {
 
           {/* Right Action Icons (Clean customer-facing layout, no public admin button) */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Reviews Link (Desktop) */}
+            <Link
+              href="/reviews"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200 transition-all cursor-pointer whitespace-nowrap"
+              title="Leave us a 5-star Google review"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>Reviews ⭐</span>
+            </Link>
+
             {/* Quick WhatsApp Support (Desktop) */}
             <a
               href={`https://wa.me/${RESTAURANT_INFO.phone}?text=${encodeURIComponent("Hi The Hunger Food! I would like to place an order.")}`}
@@ -222,6 +232,14 @@ export default function Header({ onOpenSettings }: HeaderProps) {
 
               {/* Navigation Links for Customer */}
               <nav className="mt-5 space-y-2">
+                <Link
+                  href="/reviews"
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 font-bold text-[#eb4d23] hover:scale-[1.01] transition-all"
+                >
+                  <Sparkles className="w-4 h-4 text-[#eb4d23]" aria-hidden="true" />
+                  <span>Write a Google Review ⭐</span>
+                </Link>
                 <a
                   href="#menu"
                   onClick={() => setIsDrawerOpen(false)}

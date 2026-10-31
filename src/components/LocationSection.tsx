@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { MapPin, Navigation, Clock, Phone, ExternalLink, ShieldCheck, Utensils } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Navigation, Clock, Phone, ExternalLink, ShieldCheck, Utensils, Star, Sparkles } from "lucide-react";
 import { RESTAURANT_INFO } from "@/data/menu";
 
 export default function LocationSection() {
@@ -108,6 +109,29 @@ export default function LocationSection() {
                 <span>Call Kitchen</span>
               </a>
             </div>
+
+            {/* Quick 1-Tap Google Review Generator CTA */}
+            <Link
+              href="/reviews"
+              className="p-3 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 rounded-2xl border border-amber-200 flex items-center justify-between text-xs transition-all group"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                  <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
+                </div>
+                <div>
+                  <h5 className="font-extrabold text-stone-900 group-hover:text-[#eb4d23] transition-colors">
+                    Loved our food? Leave a Google Review!
+                  </h5>
+                  <p className="text-[10px] text-stone-500">
+                    Tap to auto-copy 50+ ready-made templates & post in 5s
+                  </p>
+                </div>
+              </div>
+              <span className="px-3 py-1.5 rounded-xl bg-[#eb4d23] text-white text-[11px] font-bold shrink-0 shadow-xs">
+                Write Review ⭐
+              </span>
+            </Link>
           </div>
         </div>
       </div>
