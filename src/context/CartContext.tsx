@@ -12,6 +12,19 @@ export interface CartItem {
 
 export type OrderType = "delivery" | "takeaway" | "dine_in";
 
+export interface Coupon {
+  id: string;
+  code: string;
+  discountPercent: number;
+  minOrder?: number;
+  description?: string;
+}
+
+export const INITIAL_COUPONS: Coupon[] = [
+  { id: "c1", code: "HUNGER10", discountPercent: 10, minOrder: 0, description: "10% OFF on all orders" },
+  { id: "c2", code: "FIRST50", discountPercent: 15, minOrder: 200, description: "15% OFF on orders above ₹200" },
+];
+
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product, instructions?: string) => void;
@@ -22,12 +35,17 @@ interface CartContextType {
   totalItems: number;
   subtotal: number;
   deliveryFee: number;
+  baseDeliveryFee: number;
+  freeDeliveryThreshold: number;
   discount: number;
   grandTotal: number;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
   couponCode: string;
+  coupons: Coupon[];
+  couponMessage: string | null;
   applyCoupon: (code: string) => boolean;
+  removeCoupon: () => void;
   orderType: OrderType;
   setOrderType: (type: OrderType) => void;
   customerName: string;
@@ -49,6 +67,7 @@ interface CartContextType {
   toggleFavorite: (productId: string) => void;
   outOfStockIds: string[];
   toggleStockStatus: (productId: string) => void;
+  isStoreOpen: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -58,6 +77,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("HUNGER10");
   const [discountPercent, setDiscountPercent] = useState(10);
+  const [coupons, setCoupons] = useState<Coupon[]>(INITIAL_COUPONS);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  const [baseDeliveryFee, setBaseDeliveryFee] = useState<number>(RESTAURANT_INFO.deliveryFee);
+  const [freeDeliveryThreshold, setFreeDeliveryThreshold] = useState<number>(RESTAURANT_INFO.freeDeliveryThreshold);
+  const [isStoreOpen, setIsStoreOpen] = useState<boolean>(true);
   const [orderType, setOrderType] = useState<OrderType>("delivery");
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -69,8 +93,47 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [outOfStockIds, setOutOfStockIds] = useState<string[]>([]);
 
+  // Function to load all store settings & coupons from localStorage
+  const loadStoreSettings = () => {
+    try {
+      const storedThreshold = localStorage.getItem("thf_free_delivery_threshold");
+      if (storedThreshold !== null && !isNaN(Number(storedThreshold))) {
+        setFreeDeliveryThreshold(Number(storedThreshold));
+      }
+
+      const storedDeliveryFee = localStorage.getItem("thf_delivery_fee");
+      if (storedDeliveryFee !== null && !isNaN(Number(storedDeliveryFee))) {
+        setBaseDeliveryFee(Number(storedDeliveryFee));
+      }
+
+      const storedCoupons = localStorage.getItem("thf_coupons_list");
+      if (storedCoupons) {
+        try {
+          const parsed = JSON.parse(storedCoupons);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setCoupons(parsed);
+          }
+        } catch {}
+      } else {
+        localStorage.setItem("thf_coupons_list", JSON.stringify(INITIAL_COUPONS));
+      }
+
+      const storedOpen = localStorage.getItem("thf_is_store_open");
+      if (storedOpen !== null) {
+        setIsStoreOpen(storedOpen === "true");
+      }
+
+      const savedWa = localStorage.getItem("thf_whatsapp_number");
+      if (savedWa && savedWa !== "919876543210") {
+        setWhatsappNumber(savedWa);
+      }
+    } catch {}
+  };
+
   // Load saved state from localStorage
   useEffect(() => {
+    loadStoreSettings();
+
     try {
       const savedCart = localStorage.getItem("thf_cart");
       if (savedCart) setCart(JSON.parse(savedCart));
@@ -87,14 +150,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const savedLocation = localStorage.getItem("thf_customer_location");
       if (savedLocation) setLocationUrl(savedLocation);
 
-      const savedWa = localStorage.getItem("thf_whatsapp_number");
-      if (savedWa && savedWa !== "919876543210") {
-        setWhatsappNumber(savedWa);
-      } else {
-        setWhatsappNumber(RESTAURANT_INFO.phone);
-        localStorage.setItem("thf_whatsapp_number", RESTAURANT_INFO.phone);
-      }
-
       const savedFavs = localStorage.getItem("thf_favorites");
       if (savedFavs) setFavorites(JSON.parse(savedFavs));
 
@@ -109,6 +164,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Ignore storage errors
     }
+
+    // Listen for storage changes & custom events from Admin or other tabs
+    const handleSettingsUpdate = () => {
+      loadStoreSettings();
+    };
+
+    window.addEventListener("storage", handleSettingsUpdate);
+    window.addEventListener("thf_settings_updated", handleSettingsUpdate);
+    return () => {
+      window.removeEventListener("storage", handleSettingsUpdate);
+      window.removeEventListener("thf_settings_updated", handleSettingsUpdate);
+    };
   }, []);
 
   // Save cart changes
@@ -187,25 +254,45 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const applyCoupon = (code: string) => {
-    const clean = code.trim().toUpperCase();
-    if (clean === "HUNGER10" || clean === "FIRST50") {
-      setCouponCode(clean);
-      setDiscountPercent(10);
-      return true;
-    }
-    return false;
-  };
-
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
 
+  const applyCoupon = (code: string) => {
+    const clean = code.trim().toUpperCase();
+    if (!clean) {
+      setCouponMessage("Please enter a coupon code");
+      return false;
+    }
+
+    const found = coupons.find((c) => c.code.toUpperCase() === clean);
+    if (!found) {
+      setCouponMessage("Invalid coupon code");
+      return false;
+    }
+
+    if (found.minOrder && subtotal < found.minOrder) {
+      setCouponMessage(`Minimum order of ₹${found.minOrder} required for ${found.code}`);
+      return false;
+    }
+
+    setCouponCode(found.code);
+    setDiscountPercent(found.discountPercent);
+    setCouponMessage(`Applied ${found.code}! ${found.discountPercent}% OFF`);
+    return true;
+  };
+
+  const removeCoupon = () => {
+    setCouponCode("");
+    setDiscountPercent(0);
+    setCouponMessage(null);
+  };
+
   const deliveryFee =
-    orderType === "delivery" && subtotal > 0 && subtotal < RESTAURANT_INFO.freeDeliveryThreshold
-      ? RESTAURANT_INFO.deliveryFee
+    orderType === "delivery" && subtotal > 0 && subtotal < freeDeliveryThreshold
+      ? baseDeliveryFee
       : 0;
 
   const discount = Math.round((subtotal * discountPercent) / 100);
@@ -327,12 +414,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalItems,
         subtotal,
         deliveryFee,
+        baseDeliveryFee,
+        freeDeliveryThreshold,
         discount,
         grandTotal,
         isCartOpen,
         setIsCartOpen,
         couponCode,
+        coupons,
+        couponMessage,
         applyCoupon,
+        removeCoupon,
         orderType,
         setOrderType,
         customerName,
@@ -354,6 +446,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         toggleFavorite,
         outOfStockIds,
         toggleStockStatus,
+        isStoreOpen,
       }}
     >
       {children}

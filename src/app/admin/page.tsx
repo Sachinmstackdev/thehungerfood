@@ -8,6 +8,7 @@ import {
   INITIAL_ORDERS,
 } from "@/data/orders";
 import { INITIAL_PRODUCTS, RESTAURANT_INFO, Product } from "@/data/menu";
+import { Coupon, INITIAL_COUPONS } from "@/context/CartContext";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -45,6 +46,8 @@ import {
   Volume2,
   VolumeX,
   BellRing,
+  Tag,
+  Percent,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -59,6 +62,13 @@ export default function AdminDashboardPage() {
   const [deliveryFee, setDeliveryFee] = useState(RESTAURANT_INFO.deliveryFee);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<string>("");
+
+  // Coupon Management States
+  const [coupons, setCoupons] = useState<Coupon[]>(INITIAL_COUPONS);
+  const [newCouponCode, setNewCouponCode] = useState("");
+  const [newCouponDiscount, setNewCouponDiscount] = useState<number>(10);
+  const [newCouponMinOrder, setNewCouponMinOrder] = useState<number>(0);
+  const [couponError, setCouponError] = useState<string | null>(null);
 
   // Owner Password Authentication States
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -158,6 +168,18 @@ export default function AdminDashboardPage() {
       const storedDeliveryFee = localStorage.getItem("thf_delivery_fee");
       if (storedDeliveryFee) {
         setDeliveryFee(Number(storedDeliveryFee));
+      }
+
+      const storedCoupons = localStorage.getItem("thf_coupons_list");
+      if (storedCoupons) {
+        try {
+          const parsed = JSON.parse(storedCoupons);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setCoupons(parsed);
+          }
+        } catch {}
+      } else {
+        localStorage.setItem("thf_coupons_list", JSON.stringify(INITIAL_COUPONS));
       }
 
       const storedStoreOpen = localStorage.getItem("thf_is_store_open");
@@ -306,9 +328,64 @@ export default function AdminDashboardPage() {
       localStorage.setItem("thf_free_delivery_threshold", String(freeDeliveryThreshold));
       localStorage.setItem("thf_delivery_fee", String(deliveryFee));
       localStorage.setItem("thf_is_store_open", String(isStoreOpen));
+      localStorage.setItem("thf_coupons_list", JSON.stringify(coupons));
+
+      // Broadcast changes across tabs and context
+      window.dispatchEvent(new Event("thf_settings_updated"));
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2500);
+    } catch {}
+  };
+
+  // Add a new discount coupon
+  const handleAddCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCouponError(null);
+    const cleanCode = newCouponCode.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!cleanCode) {
+      setCouponError("Please enter a valid coupon code (e.g. SUMMER20)");
+      return;
+    }
+    if (coupons.some((c) => c.code.toUpperCase() === cleanCode)) {
+      setCouponError(`Coupon code '${cleanCode}' already exists!`);
+      return;
+    }
+    if (newCouponDiscount <= 0 || newCouponDiscount > 100) {
+      setCouponError("Discount percentage must be between 1% and 100%");
+      return;
+    }
+
+    const updated = [
+      ...coupons,
+      {
+        id: "cp-" + Date.now(),
+        code: cleanCode,
+        discountPercent: Number(newCouponDiscount),
+        minOrder: Number(newCouponMinOrder) || 0,
+        description: `${newCouponDiscount}% OFF on orders${newCouponMinOrder > 0 ? ` above ₹${newCouponMinOrder}` : ""}`,
+      },
+    ];
+
+    setCoupons(updated);
+    try {
+      localStorage.setItem("thf_coupons_list", JSON.stringify(updated));
+      window.dispatchEvent(new Event("thf_settings_updated"));
+    } catch {}
+
+    setNewCouponCode("");
+    setNewCouponDiscount(10);
+    setNewCouponMinOrder(0);
+    setCouponError(null);
+  };
+
+  // Delete a discount coupon
+  const handleDeleteCoupon = (id: string) => {
+    const updated = coupons.filter((c) => c.id !== id);
+    setCoupons(updated);
+    try {
+      localStorage.setItem("thf_coupons_list", JSON.stringify(updated));
+      window.dispatchEvent(new Event("thf_settings_updated"));
     } catch {}
   };
 
@@ -1409,6 +1486,109 @@ export default function AdminDashboardPage() {
                 >
                   {isStoreOpen ? "Accepting Orders" : "Kitchen Paused"}
                 </button>
+              </div>
+
+              {/* Discount Coupons & Offers Management */}
+              <div className="pt-2 border-t border-stone-200">
+                <div className="flex items-center gap-2 mb-1">
+                  <Tag className="w-4 h-4 text-[#eb4d23]" />
+                  <h4 className="text-xs font-bold text-stone-900">Discount Coupons & Offers</h4>
+                </div>
+                <p className="text-[11px] text-stone-500 mb-3">
+                  Create promo codes that customers can apply on checkout to get instant discounts.
+                </p>
+
+                {/* List of Active Coupons */}
+                <div className="space-y-2 mb-3">
+                  {coupons.map((c) => (
+                    <div
+                      key={c.id}
+                      className="p-3 bg-stone-50 rounded-xl border border-stone-200 flex items-center justify-between gap-2"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="px-2.5 py-1 bg-white border border-stone-300 rounded-lg text-xs font-mono font-extrabold text-[#eb4d23]">
+                          {c.code}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-stone-800">
+                            {c.discountPercent}% OFF
+                          </p>
+                          <p className="text-[10px] text-stone-500">
+                            {c.minOrder && c.minOrder > 0 ? `Min order ₹${c.minOrder}` : "No minimum order"}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCoupon(c.id)}
+                        className="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                        title="Delete coupon"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add New Coupon Form */}
+                <div className="p-3.5 bg-orange-50/60 rounded-2xl border border-orange-200 space-y-2.5">
+                  <h5 className="text-[11px] font-bold text-[#eb4d23] uppercase tracking-wider">
+                    Add New Promo Code
+                  </h5>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div>
+                      <label className="text-[10px] font-bold text-stone-600 block mb-0.5">
+                        Coupon Code
+                      </label>
+                      <input
+                        type="text"
+                        value={newCouponCode}
+                        onChange={(e) => setNewCouponCode(e.target.value.toUpperCase())}
+                        placeholder="e.g. FESTIVE20"
+                        className="w-full text-xs font-semibold p-2 rounded-xl bg-white border border-stone-300 uppercase focus:outline-none focus:border-[#eb4d23]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-stone-600 block mb-0.5">
+                        Discount (% OFF)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={newCouponDiscount}
+                        onChange={(e) => setNewCouponDiscount(Number(e.target.value))}
+                        className="w-full text-xs font-semibold p-2 rounded-xl bg-white border border-stone-300 focus:outline-none focus:border-[#eb4d23]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-stone-600 block mb-0.5">
+                        Min Order Amount (₹)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newCouponMinOrder}
+                        onChange={(e) => setNewCouponMinOrder(Number(e.target.value))}
+                        placeholder="0 for no min"
+                        className="w-full text-xs font-semibold p-2 rounded-xl bg-white border border-stone-300 focus:outline-none focus:border-[#eb4d23]"
+                      />
+                    </div>
+                  </div>
+
+                  {couponError && (
+                    <p className="text-[11px] text-rose-600 font-semibold">{couponError}</p>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleAddCoupon}
+                    className="w-full py-2 bg-stone-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5 text-[#eb4d23]" />
+                    <span>Create Promo Coupon</span>
+                  </button>
+                </div>
               </div>
 
               {/* Save Success Notice */}

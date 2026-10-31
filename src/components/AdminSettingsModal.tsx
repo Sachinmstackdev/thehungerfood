@@ -24,6 +24,7 @@ export default function AdminSettingsModal({
     setWhatsappNumber(clean);
     try {
       localStorage.setItem("thf_whatsapp_number", clean);
+      window.dispatchEvent(new Event("thf_settings_updated"));
     } catch {}
     setSaved(true);
     setTimeout(() => {

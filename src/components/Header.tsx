@@ -26,7 +26,7 @@ interface HeaderProps {
 }
 
 export default function Header({ onOpenSettings }: HeaderProps) {
-  const { totalItems, grandTotal, setIsCartOpen } = useCart();
+  const { totalItems, grandTotal, setIsCartOpen, freeDeliveryThreshold } = useCart();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -105,7 +105,7 @@ export default function Header({ onOpenSettings }: HeaderProps) {
             <span className="text-stone-300">•</span>
             <div className="flex items-center gap-1.5 text-stone-600 font-medium whitespace-nowrap">
               <Bike className="w-3.5 h-3.5 text-[#eb4d23]" aria-hidden="true" />
-              <span>Free Delivery above ₹{RESTAURANT_INFO.freeDeliveryThreshold}</span>
+              <span>Free Delivery above ₹{freeDeliveryThreshold}</span>
             </div>
           </div>
 
@@ -158,7 +158,7 @@ export default function Header({ onOpenSettings }: HeaderProps) {
                     </div>
                     <div className="p-3 bg-stone-50 rounded-2xl">
                       <p className="font-bold text-stone-800">Free Home Delivery</p>
-                      <p className="text-stone-600 text-[11px] mt-0.5">Free doorstep delivery on orders above ₹{RESTAURANT_INFO.freeDeliveryThreshold}!</p>
+                      <p className="text-stone-600 text-[11px] mt-0.5">Free doorstep delivery on orders above ₹{freeDeliveryThreshold}!</p>
                     </div>
                     <div className="p-3 bg-stone-50 rounded-2xl">
                       <p className="font-bold text-stone-800">Kurkure Chaap Special</p>
