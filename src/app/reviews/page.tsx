@@ -13,392 +13,747 @@ import {
   Shuffle,
   Search,
   ArrowLeft,
-  Heart,
-  MessageSquareHeart,
-  Share2,
 } from "lucide-react";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CUx5tiquTRdrEBM/review";
 
+export type ReviewCategory =
+  | "all"
+  | "burgers"
+  | "noodles"
+  | "manchurian"
+  | "chaap"
+  | "fries"
+  | "sandwiches";
+
 interface ReviewTemplate {
   id: number;
-  category: "all" | "gobindgarh" | "burgers" | "chinese" | "chaap" | "delivery";
+  category: "burgers" | "noodles" | "manchurian" | "chaap" | "fries" | "sandwiches";
   tag: string;
   stars: number;
   text: string;
 }
 
 const REVIEW_TEMPLATES: ReviewTemplate[] = [
-  // 1-10: Gobindgarh Local Favorites
+  // ------------------ BURGER (1-17) ------------------
   {
     id: 1,
-    category: "gobindgarh",
-    tag: "Best in Gobindgarh",
+    category: "burgers",
+    tag: "Double Tikki",
     stars: 5,
-    text: "Hands down the best fast food place in Mandi Gobindgarh! The taste, hygiene, and quick service are unmatched. Highly recommended to everyone!",
+    text: "Double Tikki Burger try kiya, do patty ke saath kaafi filling tha. Price ke hisaab se badhiya deal.",
   },
   {
     id: 2,
-    category: "gobindgarh",
-    tag: "Gobindgarh Gem",
+    category: "burgers",
+    tag: "₹30 Veg Burger",
     stars: 5,
-    text: "Finally a top-quality food spot in Gobindgarh! Everything from their burgers to noodles is piping hot, super fresh, and very reasonably priced.",
+    text: "Gobindgarh mein ₹30 mein itna accha veg burger milna mushkil hai. Bun soft tha aur garam mila.",
   },
   {
     id: 3,
-    category: "gobindgarh",
-    tag: "Local Favorite",
+    category: "burgers",
+    tag: "Maharaja Burger",
     stars: 5,
-    text: "The Hunger Food is easily my favorite evening hangout spot in Mandi Gobindgarh. Delicious fast food and very polite staff. 5 stars all the way!",
+    text: "Maharaja Burger sach mein bada hai, ek se pet bhar gaya. Sauce thoda aur hota toh perfect.",
   },
   {
     id: 4,
-    category: "gobindgarh",
-    tag: "Gobindgarh Special",
+    category: "burgers",
+    tag: "Kurkure Burger",
     stars: 5,
-    text: "Best fast food joint near Main Road Gobindgarh. Freshly made to order, clean kitchen, and amazing flavor. Must visit with family and friends!",
+    text: "Kurkure Burger ka crunch alag hi level ka hai. Bachon ko bahut pasand aaya.",
   },
   {
     id: 5,
-    category: "gobindgarh",
-    tag: "Must Visit",
+    category: "burgers",
+    tag: "Cheese Burger",
     stars: 5,
-    text: "Whenever I'm in Mandi Gobindgarh, The Hunger Food is my first choice. Great portion sizes, consistent taste, and pocket-friendly rates.",
+    text: "Cheese Burger mein cheese achhi quantity mein tha. Order WhatsApp pe kiya, time pe aa gaya.",
   },
   {
     id: 6,
-    category: "gobindgarh",
-    tag: "Gobindgarh Foodies",
+    category: "burgers",
+    tag: "Friends Hangout",
     stars: 5,
-    text: "Mandi Gobindgarh's best-kept secret for fast food lovers! Every dish is loaded with rich flavors and prepared fresh. Truly finger lickin' good!",
+    text: "College ke baad dosto ke saath aaye, sabne alag alag burger liye. Sab fresh bane hue the.",
   },
   {
     id: 7,
-    category: "gobindgarh",
-    tag: "Student Favorite",
+    category: "burgers",
+    tag: "Loaded Burger",
     stars: 5,
-    text: "Best food spot in Gobindgarh for college students and friends! Affordable prices, huge portions, and incredible taste. Love this place!",
+    text: "Loaded Burger ki toppings acchi thi. Thoda spicy pasand ho toh ye zaroor try karo.",
   },
   {
     id: 8,
-    category: "gobindgarh",
-    tag: "Top Rated",
+    category: "burgers",
+    tag: "Fast Delivery",
     stars: 5,
-    text: "If you live in or around Gobindgarh, you have to try The Hunger Food. The food quality beats big brand chains easily. Absolutely 10/10!",
+    text: "Website se order karna easy laga, burger 30 minute mein ghar pe tha.",
   },
   {
     id: 9,
-    category: "gobindgarh",
-    tag: "Family Choice",
+    category: "burgers",
+    tag: "Daily Snack",
     stars: 5,
-    text: "Ordered for my whole family in Gobindgarh and everyone loved it! Clean packaging, great quantity, and authentic taste in every bite.",
+    text: "Simple veg burger, simple price, taste bhi theek thaak se upar. Roz ke snack ke liye sahi jagah.",
   },
   {
     id: 10,
-    category: "gobindgarh",
-    tag: "Gobindgarh Best",
+    category: "burgers",
+    tag: "Burger & Fries Combo",
     stars: 5,
-    text: "Top notch fast food experience in Gobindgarh. Whether you dine in or order delivery, the quality is always 100% consistent and tasty.",
+    text: "Double Tikki Burger aur fries ka combo liya. Combo mein paise bachte hain aur portion bhi accha hai.",
   },
-
-  // 11-20: Burgers & Fries
   {
     id: 11,
     category: "burgers",
-    tag: "Burger Lovers",
+    tag: "Garam & Crispy",
     stars: 5,
-    text: "The crispy burgers here are unbeatable! Soft fresh buns, perfectly seasoned crunchy patty, and mouthwatering sauces. Best burger in Gobindgarh!",
+    text: "Burger garam aur crispy aaya, packing bhi saaf thi. Delivery wale bhaiya ka behaviour bhi accha tha.",
   },
   {
     id: 12,
     category: "burgers",
-    tag: "Double Cheese",
+    tag: "Quick Service",
     stars: 5,
-    text: "Tried their Double Cheese Burger with Peri-Peri French Fries — absolute perfection! The cheese melt was incredible. A must-try combo!",
+    text: "Shaam ko bhook lagi toh yahan aaye. Burger turant bana diya, wait zyada nahi karna pada.",
   },
   {
     id: 13,
     category: "burgers",
-    tag: "Paneer Deluxe",
+    tag: "Heavy Size",
     stars: 5,
-    text: "Their Paneer Deluxe Burger is pure bliss! Thick paneer slice, fresh crunchy lettuce, and spicy chipotle mayo. Definitely ordering again!",
+    text: "Maharaja Burger dekh ke laga itna bada kaise khayenge, par khatam ho gaya. Taste mast tha.",
   },
   {
     id: 14,
     category: "burgers",
-    tag: "Crispy Aloo Tikki",
+    tag: "Cheese Lovers",
     stars: 5,
-    text: "Authentic crispy aloo tikki burger done right! Nostalgic street flavor with premium hygiene and quality buns. Loved it!",
+    text: "Cheese Burger thoda aur cheesy ho sakta tha, baaki sab badhiya. Phir aayenge.",
   },
   {
     id: 15,
     category: "burgers",
-    tag: "Fries & Combo",
+    tag: "Weekly Favorite",
     stars: 5,
-    text: "The golden french fries are so crispy and seasoned generously. Paired with their signature burger, it is the ultimate comfort meal!",
+    text: "Kurkure Burger mera favourite ban gaya hai. Hafte mein ek baar toh order hota hi hai.",
   },
   {
     id: 16,
     category: "burgers",
-    tag: "Pocket Friendly",
+    tag: "Family Order",
     stars: 5,
-    text: "Burgers starting from just ₹30 that taste ten times better than McDonald's! Unbelievable value for money at The Hunger Food Gobindgarh.",
+    text: "Family ke liye 4 burger order kiye, sab ek jaise fresh the. Total bill bhi kam aaya.",
   },
   {
     id: 17,
     category: "burgers",
-    tag: "Loaded Burger",
+    tag: "Budget Best",
     stars: 5,
-    text: "Super juicy and loaded burgers! They don't skimp on veggies or sauces. Every bite is packed with pure flavor. Highly recommended!",
+    text: "Gobindgarh mein budget burger chahiye toh The Hunger Food best option hai.",
   },
+
+  // ------------------ NOODLES (18-34) ------------------
   {
     id: 18,
-    category: "burgers",
-    tag: "Cheese Lovers",
+    category: "noodles",
+    tag: "Hakka Noodles",
     stars: 5,
-    text: "Cheese overload! If you love cheesy burgers and cheesy fries, The Hunger Food is paradise. Freshly prepared and delivered steaming hot.",
+    text: "Hakka Noodles ekdum street style wale, wok ki khushboo aa rahi thi. Quantity bhi achhi.",
   },
   {
     id: 19,
-    category: "burgers",
-    tag: "Snack Combo",
+    category: "noodles",
+    tag: "Garlic Noodles",
     stars: 5,
-    text: "Ordered the Burger + Fries combo. Portions were hearty, fries were golden crispy, and the burger was sensational. Keep up the great work!",
+    text: "Garlic Noodles try kiye, garlic ka flavour strong tha jo mujhe pasand hai.",
   },
   {
     id: 20,
-    category: "burgers",
-    tag: "Juicy Patty",
+    category: "noodles",
+    tag: "Special Noodles",
     stars: 5,
-    text: "The burger patty was freshly fried with an incredible crunch. Easily the finest burger joint in Mandi Gobindgarh. 5 stars!",
+    text: "Special Noodles full plate do logon ke liye kaafi thi. Thodi spicy thi, maza aaya.",
   },
-
-  // 21-30: Noodles & Chinese
   {
     id: 21,
-    category: "chinese",
-    tag: "Hakka Noodles",
+    category: "noodles",
+    tag: "Fresh Veggies",
     stars: 5,
-    text: "The Hakka Noodles here are out of this world! Perfect wok smokiness, fresh crunchy veggies, and not oily at all. Best noodles in Gobindgarh!",
+    text: "Veg Noodles mein sabziyan fresh thi aur noodles chipke hue nahi the.",
   },
   {
     id: 22,
-    category: "chinese",
-    tag: "Chilli Potato",
+    category: "noodles",
+    tag: "Late Night Cravings",
     stars: 5,
-    text: "Their Crispy Honey Chilli Potato is a masterpiece! Crunchy potato fingers coated in a spicy, tangy glaze with toasted sesame. 10/10!",
+    text: "Raat 10 baje order kiya, phir bhi garam noodles aaye. Late night ke liye bhi sahi.",
   },
   {
     id: 23,
-    category: "chinese",
-    tag: "Manchurian Gravy",
+    category: "noodles",
+    tag: "Noodles & Manchurian",
     stars: 5,
-    text: "Delicious Veg Manchurian with piping hot Hakka Noodles! The gravy was rich, flavorful, and loaded with soft manchurian balls. Super satisfying!",
+    text: "Hakka Noodles aur Manchurian saath mein order karo, combo set hai.",
   },
   {
     id: 24,
-    category: "chinese",
-    tag: "Spicy Schezwan",
+    category: "noodles",
+    tag: "Chatpata Flavor",
     stars: 5,
-    text: "If you love spicy desi Chinese, try their Schezwan Noodles. The spice kick and garlic aroma are spot on. One of my favorites!",
+    text: "Noodles ka taste ghar jaisa nahi, bilkul bahar wala chatpata. Wahi chahiye tha.",
   },
   {
     id: 25,
-    category: "chinese",
-    tag: "Chinese Platter",
+    category: "noodles",
+    tag: "Garlic Loaded",
     stars: 5,
-    text: "Ordered noodles, chilli potato, and manchurian for an evening get-together. Every item was fresh, spicy, and loved by everyone!",
+    text: "Garlic Noodles mein thoda namak zyada laga, baaki taste aur portion dono badhiya.",
   },
   {
     id: 26,
-    category: "chinese",
-    tag: "Wok Specials",
+    category: "noodles",
+    tag: "Custom Spices",
     stars: 5,
-    text: "Authentic wok-tossed street noodles with zero grease. The Hunger Food serves the best Chinese food in all of Mandi Gobindgarh!",
+    text: "Bachon ke liye kam teekha bolke order kiya, unhone waisa hi bana ke bheja. Accha laga.",
   },
   {
     id: 27,
-    category: "chinese",
-    tag: "Dry Manchurian",
+    category: "noodles",
+    tag: "Gobindgarh Choice",
     stars: 5,
-    text: "Crispy Dry Manchurian was super flavorful with finely chopped capsicum and onions. Perfect snack with drinks or evening chai!",
+    text: "Gobindgarh mein noodles ke liye ab yahi jagah fix hai.",
   },
   {
     id: 28,
-    category: "chinese",
-    tag: "Garlic Noodles",
+    category: "noodles",
+    tag: "Full Worth",
     stars: 5,
-    text: "Rich chilli garlic noodles tossed with spring onions and cabbage. Flavour explosion in every forkful. Must order!",
+    text: "Special Noodles ki price thodi zyada lagi pehle, par quantity dekh ke worth it hai.",
   },
   {
     id: 29,
-    category: "chinese",
-    tag: "Street Style",
+    category: "noodles",
+    tag: "WhatsApp Order",
     stars: 5,
-    text: "Craving street-style Chinese with clean, hygienic restaurant preparation? The Hunger Food Gobindgarh delivers both with perfection!",
+    text: "WhatsApp pe order kiya, unhone turant confirm kiya aur time bhi bata diya.",
   },
   {
     id: 30,
-    category: "chinese",
-    tag: "Chinese Lovers",
+    category: "noodles",
+    tag: "₹80 Veg Noodles",
     stars: 5,
-    text: "The noodles portion is huge and easily serves two people! Great price, wonderful taste, and fast delivery. 5 stars well deserved!",
+    text: "Veg Noodles ₹80 mein itni achhi plate, students ke liye perfect.",
   },
-
-  // 31-40: Soya Chaap & Sandwiches
   {
     id: 31,
-    category: "chaap",
-    tag: "Malai Chaap",
+    category: "noodles",
+    tag: "Spill-Proof Packing",
     stars: 5,
-    text: "Their Malai Soya Chaap is melt-in-the-mouth soft! Loaded with fresh cream, butter, and mild aromatic spices. Absolute heaven!",
+    text: "Noodles garam aur fresh the, packing mein bhi leak nahi hua.",
   },
   {
     id: 32,
-    category: "chaap",
-    tag: "Tandoori Chaap",
+    category: "noodles",
+    tag: "Perfect Sauce Balance",
     stars: 5,
-    text: "The Tandoori Chaap platter is charred to perfection in authentic tandoor style! Smoky, juicy, and served with mint chutney and onions.",
+    text: "Hakka Noodles mein soya sauce ka balance sahi tha, na zyada na kam.",
   },
   {
     id: 33,
-    category: "chaap",
-    tag: "Kurkure Chaap",
+    category: "noodles",
+    tag: "Live Wok Tossed",
     stars: 5,
-    text: "Crunchiest Kurkure Chaap in Mandi Gobindgarh! Super crispy exterior and juicy tender chaap inside. Simply addictive!",
+    text: "Dukaan pe baith ke khaye, saamne hi wok pe bana rahe the. Fresh dekh ke bharosa hua.",
   },
   {
     id: 34,
-    category: "chaap",
-    tag: "Afghani Chaap",
+    category: "noodles",
+    tag: "Friends Meal",
     stars: 5,
-    text: "Creamy, rich, and mildly spiced Afghani Chaap. One of the best appetizers I have ever tasted in Punjab. Do not miss this!",
+    text: "Doston ke saath 3 plate noodles khatam kar di. Dobara zaroor aayenge.",
   },
+
+  // ------------------ MANCHURIAN (35-50) ------------------
   {
     id: 35,
-    category: "chaap",
-    tag: "Grilled Sandwiches",
+    category: "manchurian",
+    tag: "Thick Gravy",
     stars: 5,
-    text: "Ordered their Grilled Paneer & Cheese Sandwich. Toasted golden brown with buttery crunch and generous stuffing. Super delicious!",
+    text: "Manchurian ki gravy thick aur tasty thi. Balls andar tak soft the.",
   },
   {
     id: 36,
-    category: "chaap",
-    tag: "Chaap Special",
+    category: "manchurian",
+    tag: "Half Plate ₹50",
     stars: 5,
-    text: "Best soya chaap variety in Gobindgarh! The marination penetrates deep into the chaap and every single bite is succulent and flavorful.",
+    text: "Half plate Manchurian ₹50 mein, chhoti bhook ke liye perfect.",
   },
   {
     id: 37,
-    category: "chaap",
-    tag: "Paneer Sandwich",
+    category: "manchurian",
+    tag: "Full Plate Shareable",
     stars: 5,
-    text: "The Paneer Sandwich is healthy, filling, and packed with fresh spiced paneer. Perfect breakfast or evening snack on the go!",
+    text: "Full plate Manchurian do log aaram se kha sakte hain. Spice level medium tha.",
   },
   {
     id: 38,
-    category: "chaap",
-    tag: "Tandoori Platter",
+    category: "manchurian",
+    tag: "Classic Chinese Combo",
     stars: 5,
-    text: "Piping hot tandoori chaap straight off the grill! Fresh green coriander-mint chutney complemented it wonderfully. 5/5 stars!",
+    text: "Manchurian aur Hakka Noodles ka combo liya, dono garam aaye. Full satisfied.",
   },
   {
     id: 39,
-    category: "chaap",
-    tag: "Cheese Sandwich",
+    category: "manchurian",
+    tag: "Dry Manchurian",
     stars: 5,
-    text: "Golden toasted cheese sandwich with herbs and spices. Simple, comforting, and delicious. My kids' absolute favorite snack!",
+    text: "Dry Manchurian thoda aur crispy hota toh aur maza aata. Taste phir bhi accha tha.",
   },
   {
     id: 40,
-    category: "chaap",
-    tag: "Authentic Flavor",
+    category: "manchurian",
+    tag: "Best in Gobindgarh",
     stars: 5,
-    text: "Great variety of tandoori items and chaap platters. The quality of soya chaap is premium, not rubbery at all. Top notch!",
+    text: "Gobindgarh mein itni sasti aur tasty Manchurian pehli baar khayi.",
   },
-
-  // 41-50: Delivery & Customer Service
   {
     id: 41,
-    category: "delivery",
-    tag: "Super Fast Delivery",
+    category: "manchurian",
+    tag: "Ginger Garlic Aroma",
     stars: 5,
-    text: "Lightning fast doorstep delivery! Ordered on WhatsApp and received piping hot food within 20 minutes in Gobindgarh. Amazing service!",
+    text: "Gravy mein garlic aur adrak ka flavour achha aaya. Chawal ke saath bhi try karunga.",
   },
   {
     id: 42,
-    category: "delivery",
-    tag: "WhatsApp Ordering",
+    category: "manchurian",
+    tag: "25 Min Delivery",
     stars: 5,
-    text: "Ordering directly on WhatsApp through their website is so convenient! Seamless checkout, instant order confirmation, and zero hassle.",
+    text: "Shaam ke snack ke liye Manchurian order kiya, 25 minute mein aa gaya.",
   },
   {
     id: 43,
-    category: "delivery",
-    tag: "Hot & Fresh",
+    category: "manchurian",
+    tag: "Sunday Routine",
     stars: 5,
-    text: "Even during peak evening hours, the food arrived steaming hot and neatly packed. No spills, no sogginess. Best delivery in Gobindgarh!",
+    text: "Ghar pe sabko pasand aayi, ab har Sunday yahin se mangwate hain.",
   },
   {
     id: 44,
-    category: "delivery",
-    tag: "Clean Packaging",
+    category: "manchurian",
+    tag: "Family Favorite",
     stars: 5,
-    text: "Impression packaging and excellent hygiene standards! The burgers stayed crispy and noodles stayed hot. Kudos to the team!",
+    text: "Manchurian thodi meethi lagi mujhe, par family ko yahi pasand aaya.",
   },
   {
     id: 45,
-    category: "delivery",
-    tag: "Polite Delivery Rider",
+    category: "manchurian",
+    tag: "Non-Greasy & Fresh",
     stars: 5,
-    text: "The delivery executive was very polite and reached right on time using Google Maps location pin. Wonderful overall customer experience!",
+    text: "Fresh bani hui thi, tel zyada nahi tha. Pet bhi heavy nahi hua.",
   },
   {
     id: 46,
-    category: "delivery",
-    tag: "Late Night Delivery",
+    category: "manchurian",
+    tag: "Clean Kitchen",
     stars: 5,
-    text: "Open till 11:30 PM! Saved our late-night study session with hot burgers and noodles. Best late-night food in Mandi Gobindgarh!",
+    text: "Dukaan saaf suthri hai aur Manchurian saamne hi bana ke dete hain.",
   },
   {
     id: 47,
-    category: "delivery",
-    tag: "Free Delivery Deal",
+    category: "manchurian",
+    tag: "Clear Pricing",
     stars: 5,
-    text: "Free home delivery on orders above ₹299 is such a great deal for family meals. Generous quantity and delicious food every single time.",
+    text: "Website pe menu dekh ke order kiya, price saaf likhe the. Koi confusion nahi.",
   },
   {
     id: 48,
-    category: "delivery",
-    tag: "Courteous Staff",
+    category: "manchurian",
+    tag: "Portion & Value",
     stars: 5,
-    text: "The staff is super courteous and accommodating with special instructions like extra spicy or extra napkins. Truly customer-first service!",
+    text: "Manchurian Full plate ki quantity price ke hisaab se badhiya hai.",
   },
   {
     id: 49,
-    category: "delivery",
-    tag: "Consistent Quality",
+    category: "manchurian",
+    tag: "Extra Spicy Kick",
     stars: 5,
-    text: "I have ordered more than 10 times now and every single time the taste has been consistently 5-star quality. The Hunger Food never disappoints!",
+    text: "Teekha pasand hai toh extra chilli bolna, wo bana dete hain.",
   },
   {
     id: 50,
-    category: "delivery",
-    tag: "5-Star Experience",
+    category: "manchurian",
+    tag: "Fries & Manchurian",
     stars: 5,
-    text: "Outstanding taste, unbeatable prices, and lightning-fast WhatsApp delivery. The Hunger Food has become Mandi Gobindgarh's pride!",
+    text: "Manchurian ke saath fries bhi liye, dono crispy aur garam.",
+  },
+
+  // ------------------ KURKURE CHAAP (51-67) ------------------
+  {
+    id: 51,
+    category: "chaap",
+    tag: "Signature Kurkure Chaap",
+    stars: 5,
+    text: "Kurkure Chaap bahar se crunchy aur andar se soft. Is shop ki best cheez yahi hai.",
+  },
+  {
+    id: 52,
+    category: "chaap",
+    tag: "Chaap Lover's Must",
+    stars: 5,
+    text: "Chaap lover ho toh Kurkure Chaap miss mat karna. Chutney ke saath aur bhi achhi lagti hai.",
+  },
+  {
+    id: 53,
+    category: "chaap",
+    tag: "Gobindgarh Top Chaap",
+    stars: 5,
+    text: "Gobindgarh mein Kurkure Chaap ke liye ye jagah sabse sahi lagi.",
+  },
+  {
+    id: 54,
+    category: "chaap",
+    tag: "Top Recommendation",
+    stars: 5,
+    text: "Pehli baar Kurkure Chaap khayi, ab doston ko bhi yahi recommend karta hoon.",
+  },
+  {
+    id: 55,
+    category: "chaap",
+    tag: "Big Portion",
+    stars: 5,
+    text: "Plate mein pieces kaafi the, do log share kar sakte hain.",
+  },
+  {
+    id: 56,
+    category: "chaap",
+    tag: "Fresh & Balanced",
+    stars: 5,
+    text: "Chaap fresh fry karke di, tel ki smell nahi thi. Masala bhi balanced.",
+  },
+  {
+    id: 57,
+    category: "chaap",
+    tag: "Special Chaap",
+    stars: 5,
+    text: "Special Chaap bhi try ki, par mujhe Kurkure Chaap zyada pasand aayi.",
+  },
+  {
+    id: 58,
+    category: "chaap",
+    tag: "Crispy Crunch",
+    stars: 5,
+    text: "Thodi aur spicy hoti toh mere liye perfect hoti. Crunch ekdum badhiya.",
+  },
+  {
+    id: 59,
+    category: "chaap",
+    tag: "Party Hit",
+    stars: 5,
+    text: "Ghar pe party thi, 3 plate Kurkure Chaap mangwayi. Sab khatam ho gayi.",
+  },
+  {
+    id: 60,
+    category: "chaap",
+    tag: "Chaap Fry",
+    stars: 5,
+    text: "Chaap Fry bhi achhi hai, par Kurkure Chaap ka crunch alag hai.",
+  },
+  {
+    id: 61,
+    category: "chaap",
+    tag: "Hot on Delivery",
+    stars: 5,
+    text: "WhatsApp pe order kiya aur 30 minute mein garam chaap ghar pe thi.",
+  },
+  {
+    id: 62,
+    category: "chaap",
+    tag: "₹150 Value Deal",
+    stars: 5,
+    text: "₹150 mein itni tasty chaap, price bilkul theek hai.",
+  },
+  {
+    id: 63,
+    category: "chaap",
+    tag: "Pure Veg Delight",
+    stars: 5,
+    text: "Veg logon ke liye chaap best option hai, aur yahan ki chaap acchi bani hoti hai.",
+  },
+  {
+    id: 64,
+    category: "chaap",
+    tag: "Crispy Packaging",
+    stars: 5,
+    text: "Delivery mein thoda late hua, par chaap phir bhi crispy thi. Packing acchi thi.",
+  },
+  {
+    id: 65,
+    category: "chaap",
+    tag: "Dine-in Fresh",
+    stars: 5,
+    text: "Shaam ko dukaan pe khayi, garam garam plate turant mil gayi.",
+  },
+  {
+    id: 66,
+    category: "chaap",
+    tag: "Chaap & Tandoori Fries",
+    stars: 5,
+    text: "Kurkure Chaap aur Tandoori Fries saath mein lo, combo zabardast hai.",
+  },
+  {
+    id: 67,
+    category: "chaap",
+    tag: "Weekly Habit",
+    stars: 5,
+    text: "Har hafte ek baar yahan se chaap aati hai ghar pe. Taste kabhi change nahi hua.",
+  },
+
+  // ------------------ FRIES (68-83) ------------------
+  {
+    id: 68,
+    category: "fries",
+    tag: "French Fries",
+    stars: 5,
+    text: "French Fries crispy aur garam the, namak bhi sahi tha.",
+  },
+  {
+    id: 69,
+    category: "fries",
+    tag: "Tandoori Fries",
+    stars: 5,
+    text: "Tandoori Fries ka masala mast hai. Normal fries se zyada tasty.",
+  },
+  {
+    id: 70,
+    category: "fries",
+    tag: "Half Plate ₹30",
+    stars: 5,
+    text: "Half plate fries ₹30 mein, burger ke saath perfect side.",
+  },
+  {
+    id: 71,
+    category: "fries",
+    tag: "Always Crunchy",
+    stars: 5,
+    text: "Fries delivery ke baad bhi soft nahi hue, ye dekh ke accha laga.",
+  },
+  {
+    id: 72,
+    category: "fries",
+    tag: "Kids Favorite",
+    stars: 5,
+    text: "Bachon ke liye Full plate fries li, sabne khushi se khayi.",
+  },
+  {
+    id: 73,
+    category: "fries",
+    tag: "Spicy Tandoori",
+    stars: 5,
+    text: "Tandoori Fries thode aur spicy ho sakte the, baaki sab badhiya.",
+  },
+  {
+    id: 74,
+    category: "fries",
+    tag: "Gobindgarh Fries",
+    stars: 5,
+    text: "Gobindgarh mein crispy fries chahiye toh yahan try karo.",
+  },
+  {
+    id: 75,
+    category: "fries",
+    tag: "Sauces & Ketchup",
+    stars: 5,
+    text: "Fries ke saath ketchup achhi quantity mein diya, chhoti baat par acchi lagi.",
+  },
+  {
+    id: 76,
+    category: "fries",
+    tag: "Movie Night Snack",
+    stars: 5,
+    text: "Doston ke saath movie dekhte hue fries aur burger mangwaye. Time pe aa gaya.",
+  },
+  {
+    id: 77,
+    category: "fries",
+    tag: "Freshly Fried",
+    stars: 5,
+    text: "Fries fresh fry karke diye, purane wale nahi lage.",
+  },
+  {
+    id: 78,
+    category: "fries",
+    tag: "Regular Order",
+    stars: 5,
+    text: "Tandoori Fries aur Kurkure Burger, mera regular order ban gaya hai.",
+  },
+  {
+    id: 79,
+    category: "fries",
+    tag: "Full Plate Value",
+    stars: 5,
+    text: "Full plate fries ki quantity price ke hisaab se zyada hai. Worth it.",
+  },
+  {
+    id: 80,
+    category: "fries",
+    tag: "Website Order",
+    stars: 5,
+    text: "Website se order kiya, fries aur noodles dono garam pahunche.",
+  },
+  {
+    id: 81,
+    category: "fries",
+    tag: "Crispy Finger Bites",
+    stars: 5,
+    text: "Fries thode oily lage is baar, baaki taste theek tha. Phir bhi aayenge.",
+  },
+  {
+    id: 82,
+    category: "fries",
+    tag: "5 Minute Ready",
+    stars: 5,
+    text: "Dukaan pe khade khade fries kha liye, 5 minute mein ready the.",
+  },
+  {
+    id: 83,
+    category: "fries",
+    tag: "Chef Special Fries",
+    stars: 5,
+    text: "Tandoori Fries yahan ki special cheez hai. Ek baar zaroor try karo.",
+  },
+
+  // ------------------ SANDWICH (84-100) ------------------
+  {
+    id: 84,
+    category: "sandwiches",
+    tag: "Paneer Grilled",
+    stars: 5,
+    text: "Paneer Sandwich mein paneer ki filling kaafi thi. Toast bhi achha hua tha.",
+  },
+  {
+    id: 85,
+    category: "sandwiches",
+    tag: "Cheese Melt",
+    stars: 5,
+    text: "Cheese Sandwich garam aaya, cheese pighla hua tha. Breakfast ke liye best.",
+  },
+  {
+    id: 86,
+    category: "sandwiches",
+    tag: "₹60 Veg Sandwich",
+    stars: 5,
+    text: "Veg Sandwich ₹60 mein, sabziyan fresh aur chutney tasty.",
+  },
+  {
+    id: 87,
+    category: "sandwiches",
+    tag: "Morning Office Snack",
+    stars: 5,
+    text: "Subah office jaane se pehle sandwich order kiya, time pe mil gaya.",
+  },
+  {
+    id: 88,
+    category: "sandwiches",
+    tag: "Spicy Paneer",
+    stars: 5,
+    text: "Paneer Sandwich thoda aur spicy hota toh perfect, baaki bahut badhiya.",
+  },
+  {
+    id: 89,
+    category: "sandwiches",
+    tag: "Gobindgarh Grilled",
+    stars: 5,
+    text: "Gobindgarh mein grilled sandwich ke liye ye jagah try karo.",
+  },
+  {
+    id: 90,
+    category: "sandwiches",
+    tag: "Sandwich & Fries",
+    stars: 5,
+    text: "Cheese Sandwich aur fries ka combo liya, halka aur tasty khana.",
+  },
+  {
+    id: 91,
+    category: "sandwiches",
+    tag: "Crispy Toast",
+    stars: 5,
+    text: "Sandwich ki packing acchi thi, ghar tak garam aur crispy raha.",
+  },
+  {
+    id: 92,
+    category: "sandwiches",
+    tag: "Tiffin Favorite",
+    stars: 5,
+    text: "Bachon ke tiffin ke liye Veg Sandwich mangwaya, unhe bahut pasand aaya.",
+  },
+  {
+    id: 93,
+    category: "sandwiches",
+    tag: "Stuffed Paneer",
+    stars: 5,
+    text: "Paneer Sandwich ki price thodi zyada lagi, par filling dekh ke theek hai.",
+  },
+  {
+    id: 94,
+    category: "sandwiches",
+    tag: "Live Grilled",
+    stars: 5,
+    text: "Dukaan pe baith ke sandwich khaya, saamne hi grill kiya. Fresh tha.",
+  },
+  {
+    id: 95,
+    category: "sandwiches",
+    tag: "Cheesy Snack",
+    stars: 5,
+    text: "Cheese Sandwich mein cheese thoda kam laga is baar, baaki taste sahi.",
+  },
+  {
+    id: 96,
+    category: "sandwiches",
+    tag: "Easy WhatsApp Order",
+    stars: 5,
+    text: "WhatsApp pe order karna aasan hai, menu se seedha cart mein daal do.",
+  },
+  {
+    id: 97,
+    category: "sandwiches",
+    tag: "Sandwich & Noodles",
+    stars: 5,
+    text: "Sandwich aur noodles dono mangwaye, dono ka taste accha tha.",
+  },
+  {
+    id: 98,
+    category: "sandwiches",
+    tag: "Evening Chai Partner",
+    stars: 5,
+    text: "Shaam ki chai ke saath Veg Sandwich, simple aur accha.",
+  },
+  {
+    id: 99,
+    category: "sandwiches",
+    tag: "Consistent Taste",
+    stars: 5,
+    text: "Paneer Sandwich ab mera regular order hai. Har baar same taste milta hai.",
+  },
+  {
+    id: 100,
+    category: "sandwiches",
+    tag: "All-Rounder Menu",
+    stars: 5,
+    text: "Saare items try kar liye hain, sandwich bhi utna hi accha jitna burger. Overall bahut badhiya shop.",
   },
 ];
 
 export default function ReviewsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<
-    "all" | "gobindgarh" | "burgers" | "chinese" | "chaap" | "delivery"
-  >("all");
+  const [selectedCategory, setSelectedCategory] = useState<ReviewCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const [randomModalReview, setRandomModalReview] = useState<ReviewTemplate | null>(null);
 
-  // Filter templates
+  // Filter templates based on category & search
   const filteredTemplates = useMemo(() => {
     return REVIEW_TEMPLATES.filter((item) => {
       if (selectedCategory !== "all" && item.category !== selectedCategory) {
@@ -414,7 +769,7 @@ export default function ReviewsPage() {
     });
   }, [selectedCategory, searchQuery]);
 
-  // Handle Copy & Auto-Redirect
+  // Handle Copy & Auto-Redirect to Google Review
   const handleSelectReview = async (review: ReviewTemplate) => {
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -433,31 +788,31 @@ export default function ReviewsPage() {
       }
       setCopiedId(review.id);
 
-      // Brief delay so user sees "Copied!" feedback before opening Google Reviews
+      // 400ms delay so user sees "Copied!" feedback before opening Google Reviews
       setTimeout(() => {
         window.open(GOOGLE_REVIEW_URL, "_blank");
-      }, 500);
+      }, 400);
 
       setTimeout(() => {
         setCopiedId(null);
       }, 3000);
     } catch {
-      // If clipboard fails, still open Google Reviews
+      // If clipboard throws security warning, still redirect to Google
       window.open(GOOGLE_REVIEW_URL, "_blank");
     }
   };
 
-  // Pick Random Review
+  // Pick Random Review from currently selected category or all
   const handlePickRandom = () => {
-    const randomIndex = Math.floor(Math.random() * REVIEW_TEMPLATES.length);
-    const chosen = REVIEW_TEMPLATES[randomIndex];
-    setRandomModalReview(chosen);
+    const pool = filteredTemplates.length > 0 ? filteredTemplates : REVIEW_TEMPLATES;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const chosen = pool[randomIndex];
     handleSelectReview(chosen);
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f6f0] text-[#020202] flex flex-col justify-start pb-20 selection:bg-[#eb4d23] selection:text-white">
-      {/* Top Navigation Bar */}
+    <div className="min-h-screen bg-[#f8f6f0] text-[#020202] flex flex-col justify-start pb-24 selection:bg-[#eb4d23] selection:text-white">
+      {/* Top Sticky Header */}
       <header className="sticky top-0 z-30 bg-[#f8f6f0]/95 backdrop-blur-md border-b border-[#ede8dc]">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <Link
@@ -467,7 +822,7 @@ export default function ReviewsPage() {
             <div className="w-8 h-8 rounded-xl bg-white border border-[#ede8dc] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
               <ArrowLeft className="w-4 h-4 text-stone-600 group-hover:text-[#eb4d23]" />
             </div>
-            <span>Back to Storefront</span>
+            <span>Back to Menu</span>
           </Link>
 
           <div className="flex items-center gap-2">
@@ -500,25 +855,25 @@ export default function ReviewsPage() {
       <section className="max-w-5xl mx-auto px-4 pt-6 sm:pt-10 pb-4 text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100/80 border border-orange-200 text-[#eb4d23] text-xs font-bold mb-3 shadow-2xs">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Love Our Food? Share the Love on Google!</span>
+          <span>Love Our Food? Share a 5-Star Review on Google!</span>
         </div>
 
         <h1 className="text-2xl sm:text-4xl font-black text-[#020202] font-heading tracking-tight max-w-2xl mx-auto leading-tight">
-          1-Tap Review Generator for <span className="text-[#eb4d23]">The Hunger Food</span>
+          1-Tap Google Review Generator for <span className="text-[#eb4d23]">The Hunger Food</span>
         </h1>
 
         <p className="text-xs sm:text-sm text-stone-600 max-w-xl mx-auto mt-2 leading-relaxed">
-          Tap any review template below. It will <strong>automatically copy to your clipboard</strong> and open our Google Reviews page so you can just paste and hit post in 5 seconds!
+          Choose a category below and tap any review card. The text will <strong>automatically copy to your clipboard</strong> and open our Google Review page so you can just paste and submit!
         </p>
 
         {/* 3 Step Interactive Workflow Card */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mt-6 p-3 sm:p-4 bg-white rounded-2xl sm:rounded-3xl border border-[#ede8dc] shadow-soft">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mt-5 p-3 sm:p-4 bg-white rounded-2xl sm:rounded-3xl border border-[#ede8dc] shadow-soft">
           <div className="flex flex-col items-center text-center p-2">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-50 text-[#eb4d23] font-black text-xs sm:text-sm flex items-center justify-center mb-1.5 border border-orange-200">
               1
             </div>
-            <p className="text-[11px] sm:text-xs font-bold text-stone-800">Choose Review</p>
-            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">Tap any card below</p>
+            <p className="text-[11px] sm:text-xs font-bold text-stone-800">Tap Any Card</p>
+            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">100 real reviews</p>
           </div>
 
           <div className="flex flex-col items-center text-center p-2 border-x border-stone-100">
@@ -526,7 +881,7 @@ export default function ReviewsPage() {
               2
             </div>
             <p className="text-[11px] sm:text-xs font-bold text-stone-800">Auto-Copied</p>
-            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">Copies to clipboard</p>
+            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">To your phone clipboard</p>
           </div>
 
           <div className="flex flex-col items-center text-center p-2">
@@ -542,33 +897,34 @@ export default function ReviewsPage() {
         <div className="mt-5">
           <button
             onClick={handlePickRandom}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#eb4d23] to-[#d43f16] hover:from-[#d43f16] hover:to-[#b8330e] text-white font-extrabold text-sm shadow-md shadow-[#eb4d23]/25 transition-all transform active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#eb4d23] to-[#d43f16] hover:from-[#d43f16] hover:to-[#b8330e] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#eb4d23]/25 transition-all transform active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
           >
             <Shuffle className="w-4 h-4" />
-            <span>Pick a Random Review for Me (1-Click)</span>
+            <span>Pick a Random Review for Me (1-Tap Copy & Open)</span>
           </button>
         </div>
       </section>
 
-      {/* Filters & Search */}
+      {/* Category Pills & Search */}
       <section className="max-w-5xl mx-auto px-4 mt-6 w-full">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex flex-col gap-3">
+          {/* Scrollable Category Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             {[
-              { id: "all", label: "All 50 Reviews" },
-              { id: "gobindgarh", label: "📍 Gobindgarh" },
-              { id: "burgers", label: "🍔 Burgers & Fries" },
-              { id: "chinese", label: "🍜 Noodles & Chinese" },
-              { id: "chaap", label: "🍢 Tandoori Chaap" },
-              { id: "delivery", label: "🛵 Fast Delivery" },
+              { id: "all", label: "All Reviews (100)", count: 100 },
+              { id: "burgers", label: "🍔 Burger (17)", count: 17 },
+              { id: "noodles", label: "🍜 Noodles (17)", count: 17 },
+              { id: "manchurian", label: "🥣 Manchurian (16)", count: 16 },
+              { id: "chaap", label: "🍢 Kurkure Chaap (17)", count: 17 },
+              { id: "fries", label: "🍟 Fries (16)", count: 16 },
+              { id: "sandwiches", label: "🥪 Sandwich (17)", count: 17 },
             ].map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id as any)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${
+                onClick={() => setSelectedCategory(cat.id as ReviewCategory)}
+                className={`px-3.5 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all cursor-pointer border ${
                   selectedCategory === cat.id
-                    ? "bg-[#020202] text-white border-[#020202] shadow-xs"
+                    ? "bg-[#020202] text-white border-[#020202] shadow-sm scale-[1.02]"
                     : "bg-white text-stone-700 border-[#ede8dc] hover:bg-stone-50"
                 }`}
               >
@@ -578,27 +934,27 @@ export default function ReviewsPage() {
           </div>
 
           {/* Search Box */}
-          <div className="relative min-w-[200px] sm:w-64">
-            <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full">
+            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by food or tag..."
-              className="w-full text-xs font-semibold pl-9 pr-3 py-2 rounded-xl bg-white border border-[#ede8dc] focus:outline-none focus:border-[#eb4d23] shadow-2xs"
+              placeholder="Search in 100 reviews (e.g. Maharaja, Garlic Noodles, Tandoori Fries, Gobindgarh)..."
+              className="w-full text-xs font-semibold pl-10 pr-3 py-2.5 rounded-xl bg-white border border-[#ede8dc] focus:outline-none focus:border-[#eb4d23] shadow-2xs"
             />
           </div>
         </div>
       </section>
 
       {/* Reviews Grid */}
-      <section className="max-w-5xl mx-auto px-4 mt-6 w-full">
+      <section className="max-w-5xl mx-auto px-4 mt-5 w-full">
         <div className="flex items-center justify-between mb-3 text-xs text-stone-500 font-semibold">
-          <span>Showing {filteredTemplates.length} templates</span>
-          <span className="text-[#eb4d23]">⭐ Tap any card to copy & open Google</span>
+          <span>Showing <strong>{filteredTemplates.length}</strong> reviews</span>
+          <span className="text-[#eb4d23] font-bold">⭐ Tap any review to copy & redirect</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {filteredTemplates.map((review) => {
             const isCopied = copiedId === review.id;
             return (
@@ -612,11 +968,16 @@ export default function ReviewsPage() {
                 }`}
               >
                 <div>
-                  {/* Top: Tag + 5 Stars */}
-                  <div className="flex items-center justify-between gap-2 mb-2.5">
-                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-[#eb4d23] border border-orange-200">
-                      {review.tag}
-                    </span>
+                  {/* Top Bar: Review #ID + Tag + 5 Stars */}
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded-full bg-stone-100 text-stone-600 text-[10px] font-black flex items-center justify-center">
+                        #{review.id}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-[#eb4d23] border border-orange-200">
+                        {review.tag}
+                      </span>
+                    </div>
                     <div className="flex items-center text-amber-400 gap-0.5">
                       {[...Array(review.stars)].map((_, i) => (
                         <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
@@ -624,14 +985,14 @@ export default function ReviewsPage() {
                     </div>
                   </div>
 
-                  {/* Review Text */}
+                  {/* Review Hindi / Hinglish Text */}
                   <p className="text-xs sm:text-[13px] text-stone-800 font-medium leading-relaxed">
                     &ldquo;{review.text}&rdquo;
                   </p>
                 </div>
 
-                {/* Bottom Action Indicator */}
-                <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-between text-xs font-bold">
+                {/* Bottom Action Prompt */}
+                <div className="pt-3 mt-3 border-t border-stone-100 flex items-center justify-between text-xs font-bold">
                   {isCopied ? (
                     <span className="text-emerald-600 flex items-center gap-1 animate-pulse">
                       <Check className="w-4 h-4 text-emerald-600" />
@@ -640,7 +1001,7 @@ export default function ReviewsPage() {
                   ) : (
                     <span className="text-stone-500 group-hover:text-[#eb4d23] flex items-center gap-1.5 transition-colors">
                       <Copy className="w-3.5 h-3.5" />
-                      <span>Tap to Copy & Review</span>
+                      <span>Tap to Copy & Paste</span>
                     </span>
                   )}
                   <ExternalLink className="w-3.5 h-3.5 text-stone-300 group-hover:text-[#eb4d23] transition-colors" />
@@ -652,7 +1013,7 @@ export default function ReviewsPage() {
 
         {filteredTemplates.length === 0 && (
           <div className="text-center py-16 bg-white rounded-3xl border border-[#ede8dc] mt-4">
-            <p className="text-sm font-bold text-stone-700">No review templates found matching &ldquo;{searchQuery}&rdquo;</p>
+            <p className="text-sm font-bold text-stone-700">No reviews found matching &ldquo;{searchQuery}&rdquo;</p>
             <button
               onClick={() => {
                 setSearchQuery("");
@@ -660,13 +1021,13 @@ export default function ReviewsPage() {
               }}
               className="mt-3 px-4 py-2 bg-[#eb4d23] text-white text-xs font-bold rounded-xl"
             >
-              Show All Reviews
+              Show All 100 Reviews
             </button>
           </div>
         )}
       </section>
 
-      {/* Floating Floating Google Reviews CTA at bottom for Mobile */}
+      {/* Floating Sticky Mobile CTA at Bottom */}
       <div className="fixed bottom-4 left-4 right-4 max-w-md mx-auto z-40">
         <a
           href={GOOGLE_REVIEW_URL}
@@ -676,7 +1037,7 @@ export default function ReviewsPage() {
         >
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Already have your own text?</span>
+            <span>Already have your text?</span>
           </div>
           <span className="flex items-center gap-1 text-[#eb4d23]">
             <span>Open Google Maps</span>
