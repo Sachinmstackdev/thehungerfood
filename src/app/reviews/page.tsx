@@ -7,10 +7,8 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Sparkles,
   Flame,
   MapPin,
-  Shuffle,
   Search,
   ArrowLeft,
 } from "lucide-react";
@@ -802,14 +800,6 @@ export default function ReviewsPage() {
     }
   };
 
-  // Pick Random Review from currently selected category or all
-  const handlePickRandom = () => {
-    const pool = filteredTemplates.length > 0 ? filteredTemplates : REVIEW_TEMPLATES;
-    const randomIndex = Math.floor(Math.random() * pool.length);
-    const chosen = pool[randomIndex];
-    handleSelectReview(chosen);
-  };
-
   return (
     <div className="min-h-screen bg-[#f8f6f0] text-[#020202] flex flex-col justify-start pb-24 selection:bg-[#eb4d23] selection:text-white">
       {/* Top Sticky Header */}
@@ -851,62 +841,8 @@ export default function ReviewsPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="max-w-5xl mx-auto px-4 pt-6 sm:pt-10 pb-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100/80 border border-orange-200 text-[#eb4d23] text-xs font-bold mb-3 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Love Our Food? Share a 5-Star Review on Google!</span>
-        </div>
-
-        <h1 className="text-2xl sm:text-4xl font-black text-[#020202] font-heading tracking-tight max-w-2xl mx-auto leading-tight">
-          1-Tap Google Review Generator for <span className="text-[#eb4d23]">The Hunger Food</span>
-        </h1>
-
-        <p className="text-xs sm:text-sm text-stone-600 max-w-xl mx-auto mt-2 leading-relaxed">
-          Choose a category below and tap any review card. The text will <strong>automatically copy to your clipboard</strong> and open our Google Review page so you can just paste and submit!
-        </p>
-
-        {/* 3 Step Interactive Workflow Card */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mt-5 p-3 sm:p-4 bg-white rounded-2xl sm:rounded-3xl border border-[#ede8dc] shadow-soft">
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-50 text-[#eb4d23] font-black text-xs sm:text-sm flex items-center justify-center mb-1.5 border border-orange-200">
-              1
-            </div>
-            <p className="text-[11px] sm:text-xs font-bold text-stone-800">Tap Any Card</p>
-            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">100 real reviews</p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-2 border-x border-stone-100">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs sm:text-sm flex items-center justify-center mb-1.5 border border-emerald-200">
-              2
-            </div>
-            <p className="text-[11px] sm:text-xs font-bold text-stone-800">Auto-Copied</p>
-            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">To your phone clipboard</p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-50 text-blue-600 font-black text-xs sm:text-sm flex items-center justify-center mb-1.5 border border-blue-200">
-              3
-            </div>
-            <p className="text-[11px] sm:text-xs font-bold text-stone-800">Paste & Post</p>
-            <p className="text-[9px] sm:text-[10px] text-stone-400 hidden min-[360px]:block">On Google Maps</p>
-          </div>
-        </div>
-
-        {/* Big Instant Shuffle Button */}
-        <div className="mt-5">
-          <button
-            onClick={handlePickRandom}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#eb4d23] to-[#d43f16] hover:from-[#d43f16] hover:to-[#b8330e] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#eb4d23]/25 transition-all transform active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
-          >
-            <Shuffle className="w-4 h-4" />
-            <span>Pick a Random Review for Me (1-Tap Copy & Open)</span>
-          </button>
-        </div>
-      </section>
-
       {/* Category Pills & Search */}
-      <section className="max-w-5xl mx-auto px-4 mt-6 w-full">
+      <section className="max-w-5xl mx-auto px-4 pt-5 w-full">
         <div className="flex flex-col gap-3">
           {/* Scrollable Category Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
